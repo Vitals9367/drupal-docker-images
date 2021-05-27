@@ -72,7 +72,6 @@ COPY php-fpm-pool.conf /usr/local/etc/php-fpm.d/www.conf
 # Install Composer
 COPY --from=composer:2.0 /usr/bin/composer /usr/local/bin/
 
-WORKDIR /app
 ENV PATH=${PATH}:/app/vendor/bin
 
 # Copy configuration files and scripts
