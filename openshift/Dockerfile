@@ -60,12 +60,6 @@ RUN { \
 RUN apk update && apk upgrade && \
     apk add --no-cache git patch rsync bash mariadb-client alpine-sdk tini nginx bash
 
-# Create missing nginx folder.
-RUN mkdir -p /run/nginx
-
-# Configure nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY php-fpm-pool.conf /usr/local/etc/php-fpm.d/www.conf
 
@@ -73,6 +67,7 @@ COPY php-fpm-pool.conf /usr/local/etc/php-fpm.d/www.conf
 COPY --from=composer:2.0 /usr/bin/composer /usr/local/bin/
 
 ENV PATH=${PATH}:/app/vendor/bin
+ENV COMPOSER_HOME=/.composer
 
 # Copy configuration files and scripts
 COPY files/ /
@@ -81,6 +76,23 @@ RUN chmod +x /usr/local/bin/entrypoint
 
 # Fetch certificate for the Azure MariaDB service
 RUN wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /usr/local/share/ca-certificates/BaltimoreCyberTrustRoot.crt.pem
+
+
+# Create missing nginx folder.
+RUN mkdir -p /run/nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+RUN \
+  # COMPOSER_HOME permissions.
+  mkdir -p $COMPOSER_HOME && \
+  chmod -R a+rwx $COMPOSER_HOME && \
+  # File permissions to code base
+  chmod -R a+rwx /var/www/html && \
+  # Correct permissions to nginx folders.
+  chmod -R a+rwx /var/lib/nginx && \
+  chmod -R a+rwx /run/nginx && \
+  chmod -R a+rwx /var/log/nginx && \
+  chmod -R a+rwx /etc/nginx/conf.d
 
 # Expose nginx
 EXPOSE 8080
