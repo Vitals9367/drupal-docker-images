@@ -80,7 +80,8 @@ RUN wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /us
 
 # Create missing nginx folder.
 RUN mkdir -p /run/nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY drupal.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN \
   # COMPOSER_HOME permissions.
@@ -90,7 +91,6 @@ RUN \
   chmod -R a+rwx /var/www/html && \
   # Correct permissions to nginx folders.
   chmod -R a+rwx /var/lib/nginx && \
-  chmod -R a+rwx /run/nginx && \
   chmod -R a+rwx /var/log/nginx && \
   chmod -R a+rwx /etc/nginx/conf.d
 
