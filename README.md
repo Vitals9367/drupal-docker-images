@@ -1,5 +1,7 @@
 # Drupal docker images
 
+Build scripts for Docker images used by City-of-Helsinki Drupal projects.
+
 ## OpenShift Drupal docker image
 
 Contains production ready Docker images for Drupal.
