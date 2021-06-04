@@ -77,6 +77,13 @@ RUN chmod +x /usr/local/bin/entrypoint
 # Fetch certificate for the Azure MariaDB service
 RUN wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /usr/local/share/ca-certificates/BaltimoreCyberTrustRoot.crt.pem
 
+ENV DRUSH_LAUNCHER_SHA256SUM 52b5e22031789e087e4f79ac49c74d94c0379ad6859f3ec14671ce1647a3b7a6
+# Install drush launcher
+RUN \
+  curl -fSL -o drush "https://github.com/drush-ops/drush-launcher/releases/download/0.9.1/drush.phar" && \
+  echo "$DRUSH_LAUNCHER_SHA256SUM *drush" | sha256sum -c -
+
+RUN chmod +x drush && mv drush /usr/local/bin
 
 # Create missing nginx folder.
 RUN mkdir -p /run/nginx
