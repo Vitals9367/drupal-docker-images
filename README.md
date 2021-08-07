@@ -24,7 +24,7 @@ Available PHP versions: `8.0`, `7.4`:
 - `ghcr.io/city-of-helsinki/drupal-php-docker:8.0`
 - `ghcr.io/city-of-helsinki/drupal-php-docker:7.4`
 
-All containers include packages necessarily to run all Drupal tests (including FunctionalJavascript tests using `chromium-driver`).
+All containers include packages necessary to run all Drupal tests (including FunctionalJavascript tests using `chromium-driver`).
 
 See [test.yml](https://github.com/City-of-Helsinki/drupal-helfi-platform/blob/main/.github/workflows/test.yml.dist) for an example how to run tests using this image.
 
