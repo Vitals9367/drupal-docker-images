@@ -89,6 +89,7 @@ RUN chmod +x drush && mv drush /usr/local/bin
 RUN mkdir -p /run/nginx
 COPY drupal.conf /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx-custom.locations /etc/nginx/conf.d/custom.locations
 
 RUN \
   # COMPOSER_HOME permissions.
