@@ -10,7 +10,7 @@ endif
 default: build
 
 build:
-	docker build -t $(REPOSITORY):$(TAG) --build-arg PHP_VERSION=$(TAG) ./
+	docker build -t $(REPOSITORY):$(TAG) --build-arg PHP_VERSION=$(PHP_VERSION) ./
 
 push:
 	docker push $(REPOSITORY):$(TAG)
