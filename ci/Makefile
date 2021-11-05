@@ -1,20 +1,36 @@
-PHP_VERSION ?= 7.4
+BUILDARGS ?=
+
+ifndef PACKAGE
+$(error PACKAGE flag is not set)
+endif
+
+ifeq ($(PACKAGE),drupal)
+PHP_VERSION ?= 8.0
+TAG ?= $(PHP_VERSION)
 DRUSH ?= 10
 REPOSITORY = ghcr.io/city-of-helsinki/drupal-php-docker
+BUILDARGS += --build-arg DRUSH=$(DRUSH)
 BASE_IMAGE_TAG = $(PHP_VERSION)
-
-ifeq ($(TAG),)
-	TAG = $(PHP_VERSION)
 endif
+
+ifeq ($(PACKAGE),robo)
+REPOSITORY = ghcr.io/city-of-helsinki/drupal-robo
+TAG ?= latest
+BASE_IMAGE_TAG = 3.9
+endif
+
+ifndef TAG
+$(error TAG flag is not set)
+endif
+
+BUILDARGS += --build-arg BASE_IMAGE_TAG=$(BASE_IMAGE_TAG)
 
 .PHONY: build push release
 
-default: build
-
 build:
-	docker build -t $(REPOSITORY):$(TAG) --build-arg DRUSH=$(DRUSH) --build-arg BASE_IMAGE_TAG=$(TAG) ./
+	docker build -f Dockerfile.$(PACKAGE) -t $(REPOSITORY):$(TAG) $(BUILDARGS) ./
 
 push:
 	docker push $(REPOSITORY):$(TAG)
 
-release: build push
+release-drupal: build push
