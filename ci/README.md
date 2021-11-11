@@ -11,6 +11,7 @@ Contains Docker images for testing Drupal.
 - libpng-dev
 - mariadb-client
 - chromium-driver
+- gh (Github CLI)
 
 ### PHP extensions
 
