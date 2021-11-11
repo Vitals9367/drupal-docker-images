@@ -28,7 +28,7 @@ BUILDARGS += --build-arg BASE_IMAGE_TAG=$(BASE_IMAGE_TAG)
 .PHONY: build push release
 
 build:
-	docker build -f Dockerfile.$(PACKAGE) -t $(REPOSITORY):$(TAG) $(BUILDARGS) ./
+	docker build -f $(PACKAGE)/Dockerfile -t $(REPOSITORY):$(TAG) $(BUILDARGS) ./
 
 push:
 	docker push $(REPOSITORY):$(TAG)
