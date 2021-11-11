@@ -1,8 +1,9 @@
-# drupal-php-docker
+# Drupal
 
 Contains Docker images for testing Drupal.
 
-## Included packages
+## Drupal
+### Included packages
 
 - git
 - libzip-dev
@@ -11,24 +12,39 @@ Contains Docker images for testing Drupal.
 - mariadb-client
 - chromium-driver
 
-## PHP extensions
+### PHP extensions
 
 - php-gd
 - php-pdo
 - php-zip
 - php-bcmath
 
-## PHP libraries
+### PHP libraries
 
 - drush 10.x
 - composer
 
-## Development
+### Development
 
-### Building
+#### Building
 
-- `make build TAG=7.4`
+- `make build TAG=8.0 PACKAGE=drupal`
 
-### Pushing
+#### Pushing
 
-- `make push TAG=7.4`
+- `make push TAG=8.0 PACKAGE=drupal`
+
+## Robotframework
+
+Docker image used to test Drupal using Robotframework.
+
+### Development
+
+#### Building
+
+- `make build TAG=latest PACKAGE=robo`
+
+#### Pushing
+
+- `make push TAG=latest PACKAGE=robo`
+
