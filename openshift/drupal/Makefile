@@ -1,9 +1,6 @@
 PHP_VERSION ?= 8.0
+TAG ?= 8.0-dev
 REPOSITORY = ghcr.io/city-of-helsinki/drupal-docker-base
-
-ifeq ($(TAG),)
-	TAG = $(PHP_VERSION)
-endif
 
 .PHONY: build push release
 

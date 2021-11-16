@@ -16,11 +16,15 @@ RUN set -eux; \
     make \
 	; \
 	\
+  pecl install mysqlnd_azure apcu; \
+  \
 	docker-php-ext-configure gd \
 		--with-freetype \
 		--with-jpeg=/usr/include \
 	; \
 	\
+  docker-php-ext-enable apcu.so mysqlnd_azure.so; \
+  \
 	docker-php-ext-install -j "$(nproc)" \
 		gd \
 		opcache \
@@ -84,13 +88,6 @@ RUN \
   echo "$DRUSH_LAUNCHER_SHA256SUM *drush" | sha256sum -c -
 
 RUN chmod +x drush && mv drush /usr/local/bin
-
-ENV ELASTIC_APM_SHA256SUM dfcbb89b348621f96f775938b7b60cc809a4bf6147ced1531ebacc20b929bbd0
-RUN \
-  curl -fSL https://github.com/elastic/apm-agent-php/releases/download/v1.3.1/apm-agent-php_1.3.1_all.apk > apm-agent-php.apk && \
-  echo "$ELASTIC_APM_SHA256SUM *apm-agent-php.apk" | sha256sum -c -
-
-RUN apk add --allow-untrusted apm-agent-php.apk
 
 # Create missing nginx folder.
 RUN mkdir -p /run/nginx
