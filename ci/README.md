@@ -41,6 +41,19 @@ Docker image used to test Drupal using Robotframework.
 
 ### Development
 
+Slim image with:
+```
+docker-slim build \
+  --target ghcr.io/city-of-helsinki/drupal-robo:latest \
+  --tag ghcr.io/city-of-helsinki/drupal-robo:latest \
+  --exec 'bash -c "cd /app/helfi-test-automation-python && robot --exitonfailure -i CRITICAL -A environments/ci.args -v PREFIX:/kaupunkiymparisto-ja-liikenne -d robotframework-reports ."' \
+  --http-probe=false \
+  --mount ./:/app \
+  --network stonehenge-network \
+  --etc-hosts-map "varnish-helfi-kymp.docker.so:host-gateway" \
+  --etc-hosts-map "helfi-kymp.docker.so:host-gateway" \
+  --preserve-path "/usr/local/lib/python3.9"
+```
 #### Building
 
 - `make build TAG=latest PACKAGE=robo`

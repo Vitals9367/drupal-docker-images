@@ -1,38 +1,21 @@
 ARG BASE_IMAGE_TAG
 FROM python:${BASE_IMAGE_TAG}
 
-ARG release_name=gs952
-ARG archive_name=ghostpcl-9.52-linux-x86_64
+RUN pip install --no-cache-dir numpy \
+  robotframework-doctestlibrary \
+  robotframework-seleniumlibrary
 
-RUN mkdir robotframework-doctestlibrary
-WORKDIR robotframework-doctestlibrary
-RUN git clone https://github.com/manykarim/robotframework-doctestlibrary.git
-RUN pip install --no-cache-dir numpy
-WORKDIR robotframework-doctestlibrary
-#RUN python setup.py install
-RUN pip install --no-cache-dir robotframework-doctestlibrary
-WORKDIR    /
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     imagemagick \
+    ghostscript \
     tesseract-ocr \
     ghostscript \
     wget \
     libdmtx0b \
+    xvfb \
+    unzip \
     software-properties-common \
-    gettext-base \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN wget https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/${release_name}/${archive_name}.tgz \
-  && tar -xvzf ${archive_name}.tgz \
-  && chmod +x ${archive_name}/gpcl6* \
-  && cp ${archive_name}/gpcl6* ${archive_name}/pcl6 \
-  && cp ${archive_name}/* /usr/bin
-
-RUN pip install --upgrade robotframework-seleniumlibrary
-
-RUN apt-get update
-# We need wget to set up the PPA and xvfb to have a virtual screen and unzip to install the Chromedriver
-RUN apt-get install -y wget xvfb unzip
+    gettext-base
 
 # Set up the Chrome PPA
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
@@ -51,9 +34,7 @@ RUN apt-get update && \
     CHROMEVER=$(google-chrome --product-version | grep -o "[^\.]*\.[^\.]*\.[^\.]*") && \
     DRIVERVER=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROMEVER") && \
     wget -q --continue -P /chromedriver "http://chromedriver.storage.googleapis.com/$DRIVERVER/chromedriver_linux64.zip" && \
-    unzip $CHROMEDRIVER_DIR/chromedriver* -d /chromedriver
+    unzip $CHROMEDRIVER_DIR/chromedriver* -d /chromedriver && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV PATH $CHROMEDRIVER_DIR:$PATH
-
-WORKDIR    /
-
