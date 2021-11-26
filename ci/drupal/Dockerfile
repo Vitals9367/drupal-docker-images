@@ -84,7 +84,9 @@ RUN apk update && apk upgrade && \
     jq
 
 # Install Composer
-COPY --from=composer:2.0 /usr/bin/composer /usr/local/bin/
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
+# Enable COMPOSER_POOL_OPTIMIZER
+RUN composer self-update --snapshot
 ENV PATH=${PATH}:/app/vendor/bin
 ENV COMPOSER_HOME=/.composer
 
