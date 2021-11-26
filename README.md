@@ -23,8 +23,9 @@ See [ci/drupal/Dockerfile](ci/drupal/Dockerfile) and [ci/robo/Dockerfile](ci/rob
 
 Available PHP versions: `8.0`, `7.4`:
 
-- `ghcr.io/city-of-helsinki/drupal-php-docker:8.0`
-- `ghcr.io/city-of-helsinki/drupal-php-docker:7.4`
+- `ghcr.io/city-of-helsinki/drupal-php-docker:8.0-alpine`
+- `ghcr.io/city-of-helsinki/drupal-php-docker:8.0`(deprecated, use `drupal-php-docker:8.0-alpine` instead)
+- `ghcr.io/city-of-helsinki/drupal-php-docker:7.4` (deprecated, left for legacy reasons)
 
 All containers include packages necessary to run all Drupal tests (including FunctionalJavascript tests using `chromium-driver`).
 
