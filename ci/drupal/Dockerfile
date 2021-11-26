@@ -96,3 +96,5 @@ RUN \
   echo "$DRUSH_LAUNCHER_SHA256SUM *drush" | sha256sum -c - && \
   chmod +x drush && \
   mv drush /usr/bin/local
+
+RUN rm -r /var/cache/*
