@@ -15,6 +15,12 @@ Available PHP versions: `8.0`, `7.4`:
 
 See [drupal-helfi-platform/docker/openshift](https://github.com/City-of-Helsinki/drupal-helfi-platform/tree/main/docker/openshift) for an example how to use this image.
 
+## Local Drupal docker image
+
+Based on [druidfi/drupal-web:8.0](https://github.com/druidfi/docker-images):
+
+- `ghcr.io/city-of-helsinki/drupal-web:8.0`
+
 ## CI docker images
 
 Contains Docker images for testing Drupal.
