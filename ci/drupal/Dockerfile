@@ -1,15 +1,5 @@
 ARG BASE_IMAGE_TAG
-FROM php:${BASE_IMAGE_TAG}
-
-ENV GH_SHA256SUM 76bd37160c61cf668b96a362ebc01d23736ebf94ec9dfe3090cacea37fd3b3fb
-RUN \
-  curl -fSL -o gh.tar.gz "https://github.com/cli/cli/releases/download/v2.2.0/gh_2.2.0_linux_amd64.tar.gz" && \
-  echo "$GH_SHA256SUM *gh.tar.gz" | sha256sum -c - && \
-  tar -zxvf gh.tar.gz && \
-  mv gh_2.2.0_linux_amd64/bin/gh /usr/bin/gh && \
-  chmod +x /usr/bin/gh && \
-  rm -rf gh_2.2.0_linux_amd64/ && \
-  rm gh.tar.gz
+FROM php:${BASE_IMAGE_TAG} as base
 
 # install the PHP extensions we need
 RUN set -eux; \
@@ -49,7 +39,14 @@ RUN set -eux; \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)"; \
 	apk add --virtual .drupal-phpexts-rundeps $runDeps; \
-	apk del .build-deps
+	apk del .build-deps; \
+  rm /usr/local/bin/phpdbg \
+    /usr/local/bin/php-cgi
+
+# We can't remove files from base layer (php container) so we have to copy everything
+# into a new layer to not to waste space.
+FROM scratch
+COPY --from=base / /
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
@@ -69,9 +66,18 @@ RUN { \
 		echo 'post_max_size=32M'; \
 	} > /usr/local/etc/php/conf.d/php-overrides.ini
 
+ENV GH_SHA256SUM 76bd37160c61cf668b96a362ebc01d23736ebf94ec9dfe3090cacea37fd3b3fb
+RUN \
+  curl -fSL -o gh.tar.gz "https://github.com/cli/cli/releases/download/v2.2.0/gh_2.2.0_linux_amd64.tar.gz"; \
+  echo "$GH_SHA256SUM *gh.tar.gz" | sha256sum -c - ; \
+  tar -zxvf gh.tar.gz; \
+  mv gh_2.2.0_linux_amd64/bin/gh /usr/bin/gh; \
+  chmod +x /usr/bin/gh; \
+  rm -rf gh_2.2.0_linux_amd64/; \
+  rm gh.tar.gz
+
 # Install required tools
-RUN apk update && apk upgrade && \
-    apk add --no-cache \
+RUN apk add --no-cache \
     git \
     patch \
     mariadb-client \
@@ -84,19 +90,19 @@ RUN apk update && apk upgrade && \
     jq
 
 # Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
+COPY --from=composer:2.0 /usr/bin/composer /usr/local/bin/
 # Enable COMPOSER_POOL_OPTIMIZER
-RUN composer self-update --snapshot
-ENV PATH=${PATH}:/app/vendor/bin
+RUN composer self-update --snapshot; \
+  rm -r /root/.cache \
+  /root/.local \
+  /root/.config
+
 ENV COMPOSER_HOME=/.composer
 
-# Install drush
-ENV DRUSH_LAUNCHER_SHA256SUM 52b5e22031789e087e4f79ac49c74d94c0379ad6859f3ec14671ce1647a3b7a6
 # Install drush launcher
+ENV DRUSH_LAUNCHER_SHA256SUM=52b5e22031789e087e4f79ac49c74d94c0379ad6859f3ec14671ce1647a3b7a6
 RUN \
   curl -fSL -o drush "https://github.com/drush-ops/drush-launcher/releases/download/0.9.1/drush.phar" && \
-  echo "$DRUSH_LAUNCHER_SHA256SUM *drush" | sha256sum -c - && \
+  echo "${DRUSH_LAUNCHER_SHA256SUM} *drush" | sha256sum -c - && \
   chmod +x drush && \
   mv drush /usr/bin/local
-
-RUN rm -r /var/cache/*
