@@ -52,6 +52,8 @@ docker-slim build \
   --network stonehenge-network \
   --etc-hosts-map "varnish-helfi-kymp.docker.so:host-gateway" \
   --etc-hosts-map "helfi-kymp.docker.so:host-gateway" \
+  --etc-hosts-map "varnish-helfi-sote.docker.so:host-gateway" \
+  --etc-hosts-map "helfi-sote.docker.so:host-gateway" \
   --preserve-path "/usr/local/lib/python3.9"
 ```
 #### Building
