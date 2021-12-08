@@ -105,4 +105,4 @@ RUN \
   curl -fSL -o drush "https://github.com/drush-ops/drush-launcher/releases/download/0.9.1/drush.phar" && \
   echo "${DRUSH_LAUNCHER_SHA256SUM} *drush" | sha256sum -c - && \
   chmod +x drush && \
-  mv drush /usr/bin/local
+  mv drush /usr/local/bin
