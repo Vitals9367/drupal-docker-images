@@ -1,5 +1,5 @@
 ARG PHP_VERSION
-FROM php:${PHP_VERSION}-fpm-alpine3.13 as php
+FROM php:${PHP_VERSION} as php
 
 # install the PHP extensions we need
 RUN set -eux; \
@@ -16,14 +16,14 @@ RUN set -eux; \
     make \
 	; \
 	\
-  pecl install mysqlnd_azure apcu; \
+  pecl install apcu; \
   \
 	docker-php-ext-configure gd \
 		--with-freetype \
 		--with-jpeg=/usr/include \
 	; \
 	\
-  docker-php-ext-enable apcu.so mysqlnd_azure.so; \
+  docker-php-ext-enable apcu.so; \
   \
 	docker-php-ext-install -j "$(nproc)" \
 		gd \

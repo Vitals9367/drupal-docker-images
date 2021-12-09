@@ -8,10 +8,11 @@ Contains production ready Docker images for Drupal.
 
 See [openshift/drupal/Dockerfile](openshift/drupal/Dockerfile) to see how these images are built.
 
-Available PHP versions: `8.0`, `7.4`:
+Available PHP versions: `8.1`, `8.0`, `7.4`:
 
+- `ghcr.io/city-of-helsinki/drupal-docker-base:8.1`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.0`
-- `ghcr.io/city-of-helsinki/drupal-docker-base:7.4`
+- `ghcr.io/city-of-helsinki/drupal-docker-base:7.4` (deprecated)
 
 See [drupal-helfi-platform/docker/openshift](https://github.com/City-of-Helsinki/drupal-helfi-platform/tree/main/docker/openshift) for an example how to use this image.
 
