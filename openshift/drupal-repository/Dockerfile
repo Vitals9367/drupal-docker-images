@@ -21,6 +21,11 @@ ENTRYPOINT  ["/usr/local/bin/webhook"]
 RUN         apk add --no-cache git php8 php8-openssl php8-common php8-json php8-phar php8-mbstring make
 RUN         ln -s /usr/bin/php8 /usr/bin/php
 
+ENV         COMPOSER_HOME=/.composer
 COPY        --from=composer:2.0 /usr/bin/composer /usr/local/bin/
+RUN \
+  # COMPOSER_HOME permissions.
+  mkdir -p $COMPOSER_HOME && \
+  chmod -R a+rwx $COMPOSER_HOME
 
 CMD         ["-verbose", "-hooks=/etc/webhook/hooks.json", "-template", "-hotreload", "-debug"]
