@@ -25,6 +25,7 @@ RUN apk update; \
   pip install \
     --no-cache-dir \
     --upgrade \
+    robotframework-pabot \
     Pillow \
     robotframework \
     robotframework-eyes \
