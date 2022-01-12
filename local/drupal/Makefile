@@ -7,9 +7,9 @@ REPOSITORY = ghcr.io/city-of-helsinki/drupal-web
 default: build
 
 build:
-	docker build -t $(REPOSITORY):$(TAG) --build-arg PHP_VERSION=$(PHP_VERSION) ./
+	docker buildx build --platform linux/arm64,linux/amd64 -t $(REPOSITORY):$(TAG) --build-arg PHP_VERSION=$(PHP_VERSION) ./
 
 push:
-	docker push $(REPOSITORY):$(TAG)
+	docker buildx build --platform linux/arm64,linux/amd64 -t $(REPOSITORY):$(TAG) --build-arg PHP_VERSION=$(PHP_VERSION) ./ --push
 
 release: build push
