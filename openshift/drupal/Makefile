@@ -1,13 +1,14 @@
-PHP_VERSION ?= 8.1-fpm-alpine-3.15
+PHP_VERSION ?= 8.1.1-fpm-alpine3.15
 TAG ?= 8.1-dev
 REPOSITORY = ghcr.io/city-of-helsinki/drupal-docker-base
+DOCKERFILE ?= Dockerfile.php81
 
 .PHONY: build push release
 
 default: build
 
 build:
-	docker build -t $(REPOSITORY):$(TAG) --build-arg PHP_VERSION=$(PHP_VERSION) ./
+	docker build -f $(DOCKERFILE) -t $(REPOSITORY):$(TAG) --build-arg PHP_VERSION=$(PHP_VERSION) ./
 
 push:
 	docker push $(REPOSITORY):$(TAG)
