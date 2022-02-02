@@ -40,7 +40,7 @@ All containers include packages necessary to run all Drupal tests (including Fun
 
 See [test.yml](https://github.com/City-of-Helsinki/drupal-helfi-platform/blob/main/.github/workflows/test.yml.dist) for an example how to run tests using this image.
 
-Available Robotframework images: `alpine`:
+Available Robotframework images:
 
 - `ghcr.io/city-of-helsinki/drupal-robo:alpine`
 
