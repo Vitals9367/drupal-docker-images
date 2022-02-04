@@ -16,14 +16,16 @@ RUN set -eux; \
     make \
 	; \
 	\
-  pecl install mysqlnd_azure apcu; \
+  pecl install mysqlnd_azure apcu \
+    redis \
+  ; \
   \
 	docker-php-ext-configure gd \
 		--with-freetype \
 		--with-jpeg=/usr/include \
 	; \
 	\
-  docker-php-ext-enable apcu.so mysqlnd_azure.so; \
+  docker-php-ext-enable apcu.so mysqlnd_azure.so redis; \
   \
 	docker-php-ext-install -j "$(nproc)" \
 		gd \

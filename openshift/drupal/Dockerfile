@@ -16,14 +16,16 @@ RUN set -eux; \
     make \
 	; \
 	\
-  pecl install apcu; \
+  pecl install apcu \
+    redis \
+  ; \
   \
 	docker-php-ext-configure gd \
 		--with-freetype \
 		--with-jpeg=/usr/include \
 	; \
 	\
-  docker-php-ext-enable apcu.so; \
+  docker-php-ext-enable apcu.so redis; \
   \
 	docker-php-ext-install -j "$(nproc)" \
 		gd \
@@ -39,7 +41,8 @@ RUN set -eux; \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)"; \
 	apk add --virtual .drupal-phpexts-rundeps $runDeps; \
-	apk del .build-deps
+	apk del .build-deps; \
+  rm -r /tmp/*;
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
