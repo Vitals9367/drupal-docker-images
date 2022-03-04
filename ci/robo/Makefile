@@ -8,7 +8,7 @@ ifeq ($(PACKAGE),drupal)
 PHP_VERSION ?= 8.0
 TAG ?= $(PHP_VERSION)
 REPOSITORY = ghcr.io/city-of-helsinki/drupal-php-docker
-BASE_IMAGE_TAG = $(PHP_VERSION)-alpine3.13
+BASE_IMAGE_TAG = $(PHP_VERSION)-alpine3.15
 endif
 
 ifeq ($(PACKAGE),robo)

@@ -1,6 +1,21 @@
 ARG BASE_IMAGE_TAG
 FROM php:${BASE_IMAGE_TAG} as base
 
+# Install required tools
+RUN apk add --no-cache \
+    sqlite \
+    sqlite-dev \
+    git \
+    patch \
+    mariadb-client \
+    chromium \
+    chromium-chromedriver \
+    # druidfi/tools has dependency to make and
+    # 'make cast-spell' has dependency to bash
+    make \
+    bash \
+    jq
+
 # install the PHP extensions we need
 RUN set -eux; \
 	\
@@ -13,7 +28,6 @@ RUN set -eux; \
     autoconf \
     g++ \
     libtool \
-    make \
 	; \
 	\
   pecl install apcu; \
@@ -28,8 +42,10 @@ RUN set -eux; \
 	docker-php-ext-install -j "$(nproc)" \
 		gd \
 		opcache \
+    bcmath \
 		pdo_mysql \
 		zip \
+    pdo_sqlite \
 	; \
 	\
 	runDeps="$( \
@@ -76,33 +92,16 @@ RUN \
   rm -rf gh_2.2.0_linux_amd64/; \
   rm gh.tar.gz
 
-# Install required tools
-RUN apk add --no-cache \
-    git \
-    patch \
-    mariadb-client \
-    chromium \
-    chromium-chromedriver \
-    # druidfi/tools has dependency to make and
-    # 'make cast-spell' has dependency to bash
-    make \
-    bash \
-    jq
-
 # Install Composer
-COPY --from=composer:2.0 /usr/bin/composer /usr/local/bin/
-# Enable COMPOSER_POOL_OPTIMIZER
-RUN composer self-update --snapshot; \
-  rm -r /root/.cache \
-  /root/.local \
-  /root/.config
+COPY --from=composer:2.2 /usr/bin/composer /usr/local/bin/
 
 ENV COMPOSER_HOME=/.composer
 
 # Install drush launcher
-ENV DRUSH_LAUNCHER_SHA256SUM=52b5e22031789e087e4f79ac49c74d94c0379ad6859f3ec14671ce1647a3b7a6
+ENV DRUSH_LAUNCHER_SHA256SUM=d466e4268dcb2f3465feeb01518d2770c4be8ca533e010b678799bbd14dd90c5
+ENV BOX_REQUIREMENT_CHECKER=0
 RUN \
-  curl -fSL -o drush "https://github.com/drush-ops/drush-launcher/releases/download/0.9.1/drush.phar" && \
+  curl -fSL -o drush "https://github.com/drush-ops/drush-launcher/releases/download/0.10.0/drush.phar" && \
   echo "${DRUSH_LAUNCHER_SHA256SUM} *drush" | sha256sum -c - && \
   chmod +x drush && \
   mv drush /usr/local/bin
