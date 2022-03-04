@@ -1,7 +1,7 @@
 ARG PHP_VERSION
 FROM druidfi/drupal-web:php-${PHP_VERSION}
 
-COPY --from=ghcr.io/city-of-helsinki/drupal-oc-cli /usr/bin/oc /usr/bin/oc
+COPY --from=ghcr.io/city-of-helsinki/drupal-oc-cli:latest /usr/bin/oc /usr/bin/oc
 
 # Install chromedriver.
 RUN sudo apk add chromium chromium-chromedriver

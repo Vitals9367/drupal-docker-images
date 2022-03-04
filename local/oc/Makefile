@@ -5,10 +5,11 @@ REPOSITORY = ghcr.io/city-of-helsinki/drupal-oc-cli
 
 default: build
 
+build-test:
+	docker buildx build --load --progress=plain --platform linux/amd64 -t $(REPOSITORY):$(TAG) ./
 build:
-	DOCKER_BUILDKIT=1 docker build -t $(REPOSITORY):$(TAG) ./
-
+	docker buildx build --progress=plain --platform linux/arm64,linux/amd64 -t $(REPOSITORY):$(TAG) ./
 push:
-	docker push $(REPOSITORY):$(TAG)
+	docker buildx build --progress=plain --platform linux/arm64,linux/amd64 -t $(REPOSITORY):$(TAG) ./ --push
 
 release: build push
