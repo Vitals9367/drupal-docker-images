@@ -1,15 +1,15 @@
 TAG ?= latest
 REPOSITORY = ghcr.io/city-of-helsinki/drupal-oc-cli
 
-.PHONY: build push release
+.PHONY: test-amd64 push-amd64 test-arm64 push-arm64
 
-default: build
+test-amd64:
+	docker buildx build --load --platform linux/amd64 -t $(REPOSITORY):$(TAG) ./
+push-amd64:
+	docker buildx build --platform linux/amd64 -t $(REPOSITORY):$(TAG) ./ --push
+test-arm64:
+	docker buildx build --load --platform linux/arm64 -t $(REPOSITORY):$(TAG) ./
+push-arm64:
+	docker buildx build --platform linux/arm64 -t $(REPOSITORY):$(TAG) ./ --push
 
-build-test:
-	docker buildx build --load --progress=plain --platform linux/amd64 -t $(REPOSITORY):$(TAG) ./
-build:
-	docker buildx build --platform linux/arm64,linux/amd64 -t $(REPOSITORY):$(TAG) ./
-push:
-	docker buildx build --platform linux/arm64,linux/amd64 -t $(REPOSITORY):$(TAG) ./ --push
-
-release: build push
+release: push-adm64 push-arm64
