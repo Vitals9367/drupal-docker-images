@@ -14,7 +14,9 @@ RUN apk add --no-cache \
     # 'make cast-spell' has dependency to bash
     make \
     bash \
-    jq
+    jq \
+    gnupg \
+    coreutils
 
 # install the PHP extensions we need
 RUN set -eux; \
@@ -30,16 +32,17 @@ RUN set -eux; \
     libtool \
 	; \
 	\
-  pecl install apcu; \
+  pecl install apcu pcov; \
   \
 	docker-php-ext-configure gd \
 		--with-freetype \
 		--with-jpeg=/usr/include \
 	; \
 	\
-  docker-php-ext-enable apcu.so; \
+  docker-php-ext-enable apcu.so pcov.so; \
   \
 	docker-php-ext-install -j "$(nproc)" \
+    sockets \
 		gd \
 		opcache \
     bcmath \
@@ -105,3 +108,12 @@ RUN \
   echo "${DRUSH_LAUNCHER_SHA256SUM} *drush" | sha256sum -c - && \
   chmod +x drush && \
   mv drush /usr/local/bin
+
+RUN curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import; \
+  curl -Os https://uploader.codecov.io/latest/alpine/codecov; \
+  curl -Os https://uploader.codecov.io/latest/alpine/codecov.SHA256SUM; \
+  curl -Os https://uploader.codecov.io/latest/alpine/codecov.SHA256SUM.sig; \
+  gpgv codecov.SHA256SUM.sig codecov.SHA256SUM; \
+  sha256sum -c codecov.SHA256SUM; \
+  chmod +x codecov; \
+  mv codecov /usr/bin/;
