@@ -6,6 +6,9 @@ COPY --from=ghcr.io/city-of-helsinki/drupal-oc-cli:latest /usr/bin/oc /usr/bin/o
 # Install chromedriver.
 RUN sudo apk add chromium chromium-chromedriver
 
+# Install pcov.
+RUN apk --no-cache -X https://dl-cdn.alpinelinux.org/alpine/edge/testing add php8-pecl-pcov
+
 # Configure nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY custom.locations /etc/nginx/conf.d/custom.locations
