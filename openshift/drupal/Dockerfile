@@ -75,7 +75,6 @@ RUN \
   chmod -R a+rwx /etc/nginx/conf.d && \
   # Redirect log output to docker log collector.
   touch /var/log/drupal.log && \
-  ln -sf /proc/1/fd/1 /var/log/drupal.lorg && \
   ln -sf /proc/1/fd/1 /var/log/nginx/access.log && \
   ln -sf /proc/1/fd/2 /var/log/nginx/error.log && \
   ln -sf /proc/1/fd/1 /var/log/drupal.log
