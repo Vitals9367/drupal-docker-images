@@ -1,49 +1,6 @@
 ARG PHP_VERSION
 FROM php:${PHP_VERSION} as php
 
-# install the PHP extensions we need
-RUN set -eux; \
-	\
-	apk add --no-cache --virtual .build-deps \
-		coreutils \
-		freetype-dev \
-		libjpeg-turbo-dev \
-		libpng-dev \
-		libzip-dev \
-    autoconf \
-    g++ \
-    libtool \
-    make \
-	; \
-	\
-  pecl install apcu \
-    redis \
-  ; \
-  \
-	docker-php-ext-configure gd \
-		--with-freetype \
-		--with-jpeg=/usr/include \
-	; \
-	\
-  docker-php-ext-enable apcu.so redis; \
-  \
-	docker-php-ext-install -j "$(nproc)" \
-		gd \
-		opcache \
-		pdo_mysql \
-		zip \
-	; \
-	\
-	runDeps="$( \
-		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
-			| tr ',' '\n' \
-			| sort -u \
-			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-	)"; \
-	apk add --virtual .drupal-phpexts-rundeps $runDeps; \
-	apk del .build-deps; \
-  rm -r /tmp/*;
-
 ENV ELASTIC_APM_SHA256SUM dfcbb89b348621f96f775938b7b60cc809a4bf6147ced1531ebacc20b929bbd0
 RUN \
   curl -fSL https://github.com/elastic/apm-agent-php/releases/download/v1.3.1/apm-agent-php_1.3.1_all.apk > apm-agent-php.apk && \
@@ -86,16 +43,16 @@ ENV COMPOSER_HOME=/.composer
 
 # Copy configuration files and scripts
 COPY files/ /
-RUN chmod +x /entrypoints/*
-RUN chmod +x /usr/local/bin/entrypoint
+RUN chmod +x /entrypoints/* && \
+  chmod +x /usr/local/bin/entrypoint
 
 # Fetch certificate for the Azure MariaDB service
 RUN wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /usr/local/share/ca-certificates/BaltimoreCyberTrustRoot.crt.pem
 
-ENV DRUSH_LAUNCHER_SHA256SUM 52b5e22031789e087e4f79ac49c74d94c0379ad6859f3ec14671ce1647a3b7a6
+ENV DRUSH_LAUNCHER_SHA256SUM c6e3e520a33ac7790ab37e5af0fd91fc1108f0830a3a5ebe5b7c36e8782bea30
 # Install drush launcher
 RUN \
-  curl -fSL -o drush "https://github.com/drush-ops/drush-launcher/releases/download/0.9.1/drush.phar" && \
+  curl -fSL -o drush "https://github.com/drush-ops/drush-launcher/releases/download/0.10.1/drush.phar" && \
   echo "$DRUSH_LAUNCHER_SHA256SUM *drush" | sha256sum -c -
 
 RUN chmod +x drush && mv drush /usr/local/bin
@@ -115,7 +72,13 @@ RUN \
   # Correct permissions to nginx folders.
   chmod -R a+rwx /var/lib/nginx && \
   chmod -R a+rwx /var/log/nginx && \
-  chmod -R a+rwx /etc/nginx/conf.d
+  chmod -R a+rwx /etc/nginx/conf.d && \
+  # Redirect log output to docker log collector.
+  touch /var/log/drupal.log && \
+  ln -sf /proc/1/fd/1 /var/log/drupal.lorg && \
+  ln -sf /proc/1/fd/1 /var/log/nginx/access.log && \
+  ln -sf /proc/1/fd/2 /var/log/nginx/error.log && \
+  ln -sf /proc/1/fd/1 /var/log/drupal.log
 
 # Expose nginx
 EXPOSE 8080
@@ -124,3 +87,89 @@ ENTRYPOINT ["/sbin/tini", "--"]
 
 # Default command: Start up multiple services via entrypoint
 CMD ["entrypoint"]
+
+# install the PHP extensions we need
+FROM php as php80
+RUN set -eux; \
+	\
+	apk add --no-cache --virtual .build-deps \
+		coreutils \
+		freetype-dev \
+		libjpeg-turbo-dev \
+		libpng-dev \
+		libzip-dev \
+    autoconf \
+    g++ \
+    libtool \
+    make \
+	; \
+	\
+  pecl install mysqlnd_azure apcu \
+    redis \
+  ; \
+  \
+	docker-php-ext-configure gd \
+		--with-freetype \
+		--with-jpeg=/usr/include \
+	; \
+	\
+  docker-php-ext-enable apcu.so mysqlnd_azure.so redis; \
+  \
+	docker-php-ext-install -j "$(nproc)" \
+		gd \
+		opcache \
+		pdo_mysql \
+		zip \
+	; \
+	\
+	runDeps="$( \
+		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
+			| tr ',' '\n' \
+			| sort -u \
+			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+	)"; \
+	apk add --virtual .drupal-phpexts-rundeps $runDeps; \
+	apk del .build-deps
+
+FROM php as php81
+RUN set -eux; \
+	\
+	apk add --no-cache --virtual .build-deps \
+		coreutils \
+		freetype-dev \
+		libjpeg-turbo-dev \
+		libpng-dev \
+		libzip-dev \
+    autoconf \
+    g++ \
+    libtool \
+    make \
+	; \
+	\
+  pecl install apcu \
+    redis \
+  ; \
+  \
+	docker-php-ext-configure gd \
+		--with-freetype \
+		--with-jpeg=/usr/include \
+	; \
+	\
+  docker-php-ext-enable apcu.so redis; \
+  \
+	docker-php-ext-install -j "$(nproc)" \
+		gd \
+		opcache \
+		pdo_mysql \
+		zip \
+	; \
+	\
+	runDeps="$( \
+		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
+			| tr ',' '\n' \
+			| sort -u \
+			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+	)"; \
+	apk add --virtual .drupal-phpexts-rundeps $runDeps; \
+	apk del .build-deps; \
+  rm -r /tmp/*;
