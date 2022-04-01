@@ -16,6 +16,8 @@ COPY php-fpm-pool.conf /etc/php8/php-fpm.d/www.conf
 # Autostart chromedriver and drush server
 COPY entrypoints/30-chromedriver.sh /entrypoints
 COPY entrypoints/30-drush-server.sh /entrypoints
+# Autostart syslog
+COPY entrypoints/15-syslog.sh /entrypoints
 
 FROM base as php81
 RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing add php81-pecl-pcov
