@@ -30,7 +30,16 @@ RUN { \
 # Install required tools (https://docs.acquia.com/blt/install/)
 # alpine-sdk required for the make script in composer.json
 RUN apk update && apk upgrade && \
-    apk add --no-cache git patch rsync bash mariadb-client alpine-sdk tini nginx bash
+    apk add --no-cache git \
+    patch \
+    rsync \
+    bash \
+    mariadb-client \
+    alpine-sdk \
+    tini \
+    nginx \
+    bash \
+    jq
 
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY php-fpm-pool.conf /usr/local/etc/php-fpm.d/www.conf
