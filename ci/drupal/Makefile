@@ -33,13 +33,11 @@ push-php81: test-php81
 
 PHONY += test-php80
 test-php80: build-php80
-	# Test php 8.0 images
 	cst test --image ghcr.io/city-of-helsinki/drupal-php-docker:8.0-alpine --config tests/php80.yaml
 	cst test --image ghcr.io/city-of-helsinki/drupal-php-docker:8.0-alpine --config tests/php.yaml
 
 PHONY += test-php81
 test-php81: build-php81
-	# Test php 8.1 images
 	cst test --image ghcr.io/city-of-helsinki/drupal-php-docker:8.1-alpine --config tests/php81.yaml
 	cst test --image ghcr.io/city-of-helsinki/drupal-php-docker:8.1-alpine --config tests/php.yaml
 
