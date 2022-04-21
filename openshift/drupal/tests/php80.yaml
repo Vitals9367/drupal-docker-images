@@ -1,0 +1,13 @@
+schemaVersion: '2.0.0'
+commandTests:
+  - name: 'PHP version'
+    command: php
+    args: ['--version']
+    expectedOutput: ['PHP 8.0.*']
+  - name: 'PHP extensions'
+    command: bash
+    args:
+      - -c
+      - |
+        php -m | grep -e mysqlnd_azure
+    expectedOutput: ["mysqlnd_azure"]

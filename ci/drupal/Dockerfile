@@ -98,6 +98,10 @@ RUN \
 # Install Composer
 COPY --from=composer:2.3 /usr/bin/composer /usr/local/bin/
 
+# Setup script
+COPY setup.sh /setup.sh
+RUN chmod +x /setup.sh
+
 ENV COMPOSER_HOME=/.composer
 
 # Install drush launcher

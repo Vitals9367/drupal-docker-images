@@ -1,9 +1,9 @@
 ARG PHP_VERSION
 FROM php:${PHP_VERSION} as php
 
-ENV ELASTIC_APM_SHA256SUM dfcbb89b348621f96f775938b7b60cc809a4bf6147ced1531ebacc20b929bbd0
+ENV ELASTIC_APM_SHA256SUM 7f85305f0131c2adf3d3073d8c58b5791029b3bbd98f26743bdc2609b408aa76
 RUN \
-  curl -fSL https://github.com/elastic/apm-agent-php/releases/download/v1.3.1/apm-agent-php_1.3.1_all.apk > apm-agent-php.apk && \
+  curl -fSL https://github.com/elastic/apm-agent-php/releases/download/v1.5/apm-agent-php_1.5_all.apk > apm-agent-php.apk && \
   echo "$ELASTIC_APM_SHA256SUM *apm-agent-php.apk" | sha256sum -c - && \
   apk add --allow-untrusted apm-agent-php.apk && \
   rm apm-agent-php.apk
@@ -45,7 +45,7 @@ RUN apk update && apk upgrade && \
 COPY php-fpm-pool.conf /usr/local/etc/php-fpm.d/www.conf
 
 # Install Composer
-COPY --from=composer:2.2 /usr/bin/composer /usr/local/bin/
+COPY --from=composer:2.3 /usr/bin/composer /usr/local/bin/
 
 ENV PATH=${PATH}:/app/vendor/bin
 ENV COMPOSER_HOME=/.composer

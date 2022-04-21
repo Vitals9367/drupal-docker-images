@@ -1,0 +1,7 @@
+# @todo Improve these
+schemaVersion: '2.0.0'
+commandTests:
+  - name: 'Nginx is installed'
+    command: which
+    args: ['nginx']
+
