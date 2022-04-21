@@ -96,7 +96,7 @@ RUN \
   rm gh.tar.gz
 
 # Install Composer
-COPY --from=composer:2.2 /usr/bin/composer /usr/local/bin/
+COPY --from=composer:2.3 /usr/bin/composer /usr/local/bin/
 
 ENV COMPOSER_HOME=/.composer
 
@@ -115,5 +115,6 @@ RUN curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyr
   curl -Os https://uploader.codecov.io/latest/alpine/codecov.SHA256SUM.sig; \
   gpgv codecov.SHA256SUM.sig codecov.SHA256SUM; \
   sha256sum -c codecov.SHA256SUM; \
+  rm codecov.*; \
   chmod +x codecov; \
   mv codecov /usr/bin/;
