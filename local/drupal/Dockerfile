@@ -3,8 +3,10 @@ FROM druidfi/drupal-web:php-${PHP_VERSION} as base
 
 COPY --from=ghcr.io/city-of-helsinki/drupal-oc-cli:latest /usr/bin/oc /usr/bin/oc
 
+RUN sudo apk add --no-cache jq
+
 # Install chromedriver.
-RUN sudo apk add --no-cache chromium chromium-chromedriver jq
+RUN sudo apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community chromium chromium-chromedriver
 
 # Configure nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
