@@ -54,6 +54,6 @@ commandTests:
 metadataTest:
   env:
     - key: 'COMPOSER_HOME'
-      value: '/.composer'
+      value: '/tmp/.composer'
     - key: 'BOX_REQUIREMENT_CHECKER'
       value: '0'
