@@ -22,30 +22,8 @@ Contains Docker images for testing Drupal.
 
 ### PHP libraries
 
-- drush 10.x
 - composer
-
-### Development
-
-#### Building
-
-- `make build TAG=8.0 PACKAGE=drupal`
-
-#### Pushing
-
-- `make push TAG=8.0 PACKAGE=drupal`
 
 ## Robotframework
 
 Docker image used to test Drupal using Robotframework.
-
-### Development
-
-#### Building
-
-- `make build TAG=latest PACKAGE=robo`
-
-#### Pushing
-
-- `make push TAG=latest PACKAGE=robo`
-
