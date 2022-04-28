@@ -6,7 +6,7 @@ RUN apk add --no-cache git php8 php8-openssl php8-common php8-json php8-phar php
   ln -s /usr/bin/php8 /usr/bin/php
 
 ENV COMPOSER_HOME=/.composer
-COPY --from=composer:2.2 /usr/bin/composer /usr/local/bin/
+COPY --from=composer:2.3 /usr/bin/composer /usr/local/bin/
 RUN \
   # COMPOSER_HOME permissions.
   mkdir -p $COMPOSER_HOME && \
