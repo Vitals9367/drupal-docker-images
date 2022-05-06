@@ -9,8 +9,8 @@ commandTests:
     args:
       - -c
       - |
-        php -m | grep -e json -e apcu -e curl -e elastic_apm -e gd -e mbstring -e openssl -e pdo -e redis -e "Zend OPcache"
-    expectedOutput: ["apcu\ncurl\nelastic_apm\ngd\njson\nmbstring\nopenssl\npdo_mysql\npdo_sqlite\nredis\nZend OPcache\nZend OPcache"]
+        php -m | grep -e json -e apcu -e curl -e elastic_apm -e gd -e mbstring -e openssl -e pdo -e redis -e "Zend OPcache" -e tokenizer
+    expectedOutput: ["apcu\ncurl\nelastic_apm\ngd\njson\nmbstring\nopenssl\npdo_mysql\nredis\ntokenizer\nZend OPcache\nZend OPcache"]
   - name: 'Git is installed'
     command: which
     args: ['git']

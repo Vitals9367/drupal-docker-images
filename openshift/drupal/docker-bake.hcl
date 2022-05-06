@@ -1,0 +1,55 @@
+variable "REPO_BASE" {
+  default = "ghcr.io/city-of-helsinki/drupal-docker-base"
+}
+group "default" {
+  targets = ["dev"]
+}
+
+group "dev" {
+  targets = ["php80-dev", "php81-dev"]
+}
+
+group "prod" {
+  targets = ["php80", "php81"]
+}
+
+target "php" {
+  target = "final"
+}
+
+target "php81-dev" {
+  inherits = ["php"]
+  args = {
+    PHP_VERSION = "8.1"
+    PHP_SHORT_VERSION = "81"
+  }
+  tags = ["${REPO_BASE}:8.1-dev"]
+}
+
+target "php81" {
+  inherits = ["php"]
+  args = {
+    PHP_VERSION = "8.1"
+    PHP_SHORT_VERSION = "81"
+  }
+  tags = ["${REPO_BASE}:8.1"]
+}
+
+target "php80" {
+  inherits = ["php"]
+  args = {
+    PHP_VERSION = "8.0"
+    PHP_SHORT_VERSION = "80"
+  }
+  tags = ["${REPO_BASE}:8.0"]
+}
+
+target "php80-dev" {
+  inherits = ["php"]
+  args = {
+    PHP_VERSION = "8.0"
+    PHP_SHORT_VERSION = "80"
+  }
+  tags = ["${REPO_BASE}:8.0-dev"]
+}
+

@@ -1,35 +1,11 @@
 ARG PHP_VERSION
-FROM php:${PHP_VERSION} as php
-
-ENV ELASTIC_APM_SHA256SUM 7f85305f0131c2adf3d3073d8c58b5791029b3bbd98f26743bdc2609b408aa76
-RUN \
-  curl -fSL https://github.com/elastic/apm-agent-php/releases/download/v1.5/apm-agent-php_1.5_all.apk > apm-agent-php.apk && \
-  echo "$ELASTIC_APM_SHA256SUM *apm-agent-php.apk" | sha256sum -c - && \
-  apk add --allow-untrusted apm-agent-php.apk && \
-  rm apm-agent-php.apk
-
-# set recommended PHP.ini settings
-# see https://secure.php.net/manual/en/opcache.installation.php
-RUN { \
-		echo 'opcache.memory_consumption=128'; \
-		echo 'opcache.interned_strings_buffer=8'; \
-		echo 'opcache.max_accelerated_files=4000'; \
-		echo 'opcache.revalidate_freq=60'; \
-		echo 'opcache.fast_shutdown=1'; \
-	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
-
-# override memory limit and upload max filesize and post max size
-# to enable bigger uploads
-RUN { \
-		echo 'memory_limit=512M'; \
-		echo 'upload_max_filesize=32M'; \
-		echo 'post_max_size=32M'; \
-    echo 'max_execution_time=180'; \
-	} > /usr/local/etc/php/conf.d/php-overrides.ini
+ARG PHP_SHORT_VERSION
+FROM alpine:3.15.4 as php
 
 # Install required tools (https://docs.acquia.com/blt/install/)
 # alpine-sdk required for the make script in composer.json
-RUN apk update && apk upgrade && \
+RUN set -eux; \
+    apk update && apk upgrade && \
     apk add --no-cache git \
     patch \
     rsync \
@@ -40,9 +16,6 @@ RUN apk update && apk upgrade && \
     nginx \
     bash \
     jq
-
-# Override default fpm pool conf to run nginx and php-fpm as same user.
-COPY php-fpm-pool.conf /usr/local/etc/php-fpm.d/www.conf
 
 # Install Composer
 COPY --from=composer:2.3 /usr/bin/composer /usr/local/bin/
@@ -68,7 +41,7 @@ RUN chmod +x drush && mv drush /usr/local/bin
 
 # Create missing nginx folder.
 RUN mkdir -p /run/nginx
-COPY drupal.conf /etc/nginx/conf.d/default.conf
+COPY drupal.conf /etc/nginx/http.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx-custom.locations /etc/nginx/conf.d/custom.locations
 
@@ -77,6 +50,7 @@ RUN \
   mkdir -p $COMPOSER_HOME && \
   chmod -R a+rwx $COMPOSER_HOME && \
   # File permissions to code base
+  mkdir -p /var/www/html && \
   chmod -R a+rwx /var/www/html && \
   # Correct permissions to nginx folders.
   chmod -R a+rwx /var/lib/nginx && \
@@ -97,85 +71,83 @@ CMD ["entrypoint"]
 # install the PHP extensions we need
 FROM php as php80
 RUN set -eux; \
-	\
-	apk add --no-cache --virtual .build-deps \
-		coreutils \
-		freetype-dev \
-		libjpeg-turbo-dev \
-		libpng-dev \
-		libzip-dev \
-    autoconf \
-    g++ \
-    libtool \
-    make \
-	; \
-	\
-  pecl install mysqlnd_azure apcu \
-    redis \
-  ; \
-  \
-	docker-php-ext-configure gd \
-		--with-freetype \
-		--with-jpeg=/usr/include \
-	; \
-	\
-  docker-php-ext-enable apcu.so mysqlnd_azure.so redis; \
-  \
-	docker-php-ext-install -j "$(nproc)" \
-		gd \
-		opcache \
-		pdo_mysql \
-		zip \
-	; \
-	\
-	runDeps="$( \
-		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
-			| tr ',' '\n' \
-			| sort -u \
-			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-	)"; \
-	apk add --virtual .drupal-phpexts-rundeps $runDeps; \
-	apk del .build-deps
+  apk add --no-cache --virtual .build-deps \
+    php8-dev; \
+  apk add --no-cache \
+    php8-pear \
+    php8-fpm \
+    php8-curl \
+    php8-fileinfo \
+    php8-iconv \
+    php8-mbstring \
+    php8-opcache \
+    php8-openssl \
+    php8-phar \
+    php8-session \
+    php8-zip \
+    php8-dom \
+    php8-pdo \
+    php8-pdo_mysql \
+    php8-tokenizer \
+    php8-gd \
+    php8-pecl-apcu \
+    php8-pecl-redis; \
+    pecl8 install mysqlnd_azure; \
+    ln -sfn /usr/bin/php8 /usr/bin/php && \
+    ln -sfn /usr/sbin/php-fpm8 /usr/bin/php-fpm; \
+    apk del .build-deps; \
+    echo "extension=mysqlnd_azure.so" >> /etc/php8/conf.d/mysqlnd_azure.ini
 
 FROM php as php81
 RUN set -eux; \
-	\
-	apk add --no-cache --virtual .build-deps \
-		coreutils \
-		freetype-dev \
-		libjpeg-turbo-dev \
-		libpng-dev \
-		libzip-dev \
-    autoconf \
-    g++ \
-    libtool \
-    make \
-	; \
-	\
-  pecl install apcu \
-    redis \
-  ; \
-  \
-	docker-php-ext-configure gd \
-		--with-freetype \
-		--with-jpeg=/usr/include \
-	; \
-	\
-  docker-php-ext-enable apcu.so redis; \
-  \
-	docker-php-ext-install -j "$(nproc)" \
-		gd \
-		opcache \
-		pdo_mysql \
-		zip \
-	; \
-	\
-	runDeps="$( \
-		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
-			| tr ',' '\n' \
-			| sort -u \
-			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-	)"; \
-	apk add --virtual .drupal-phpexts-rundeps $runDeps; \
-	apk del .build-deps; \
-  rm -r /tmp/*;
+    apk --no-cache -X https://dl-cdn.alpinelinux.org/alpine/edge/testing add \
+    php81-pear \
+    php81-fpm \
+    php81-curl \
+    php81-fileinfo \
+    php81-iconv \
+    php81-mbstring \
+    php81-opcache \
+    php81-openssl \
+    php81-phar \
+    php81-session \
+    php81-zip \
+    php81-dom \
+    php81-pdo \
+    php81-pdo_mysql \
+    php81-tokenizer \
+    php81-gd \
+    php81-pecl-apcu \
+    php81-pecl-redis; \
+    ln -sfn /usr/bin/php8 /usr/bin/php && \
+    ln -sfn /usr/sbin/php-fpm8 /usr/bin/php-fpm;
+
+FROM php${PHP_SHORT_VERSION} as final
+ENV ELASTIC_APM_SHA256SUM 7f85305f0131c2adf3d3073d8c58b5791029b3bbd98f26743bdc2609b408aa76
+RUN set -eux; \
+  curl -fSL https://github.com/elastic/apm-agent-php/releases/download/v1.5/apm-agent-php_1.5_all.apk > apm-agent-php.apk && \
+  echo "$ELASTIC_APM_SHA256SUM *apm-agent-php.apk" | sha256sum -c - && \
+  apk add --allow-untrusted apm-agent-php.apk && \
+  rm apm-agent-php.apk
+
+# set recommended PHP.ini settings
+# see https://secure.php.net/manual/en/opcache.installation.php
+RUN { \
+		echo 'opcache.memory_consumption=128'; \
+		echo 'opcache.interned_strings_buffer=8'; \
+		echo 'opcache.max_accelerated_files=4000'; \
+		echo 'opcache.revalidate_freq=60'; \
+		echo 'opcache.fast_shutdown=1'; \
+	} > /etc/php8/conf.d/opcache-recommended.ini
+
+# override memory limit and upload max filesize and post max size
+# to enable bigger uploads
+RUN { \
+		echo 'memory_limit=512M'; \
+		echo 'upload_max_filesize=32M'; \
+		echo 'post_max_size=32M'; \
+    echo 'max_execution_time=180'; \
+	} > /etc/php8/conf.d/php-overrides.ini
+
+# Override default fpm pool conf to run nginx and php-fpm as same user.
+COPY php-fpm-pool.conf /etc/php8/php-fpm.d/www.conf
