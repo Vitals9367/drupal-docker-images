@@ -1,8 +1,12 @@
 PHONY :=
 REPOSITORY = ghcr.io/city-of-helsinki/drupal-docker-base
 
+PHONY += help
+help:
+	@echo -e "See README.md for usage"
+
 PHONY += push-php-dev
-push-php-dev: push-php-81-dev push-php-80-dev
+push-php-dev: push-php81-dev push-php80-dev
 
 PHONY += push-php81-dev
 push-php81-dev: test-php81-dev
