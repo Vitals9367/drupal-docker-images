@@ -89,6 +89,8 @@ RUN set -eux; \
     php8-pdo \
     php8-pdo_mysql \
     php8-tokenizer \
+    php8-xmlreader \
+    php8-xmlwriter \
     php8-gd \
     php8-pecl-apcu \
     php8-pecl-redis; \
@@ -116,6 +118,8 @@ RUN set -eux; \
     php81-pdo \
     php81-pdo_mysql \
     php81-tokenizer \
+    php8-xmlreader \
+    php8-xmlwriter \
     php81-gd \
     php81-pecl-apcu \
     php81-pecl-redis; \
