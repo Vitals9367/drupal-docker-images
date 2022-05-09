@@ -91,6 +91,8 @@ RUN set -eux; \
     php8-tokenizer \
     php8-xmlreader \
     php8-xmlwriter \
+    php8-simplexml \
+    php8-ctype \
     php8-gd \
     php8-pecl-apcu \
     php8-pecl-redis; \
@@ -120,6 +122,8 @@ RUN set -eux; \
     php81-tokenizer \
     php8-xmlreader \
     php8-xmlwriter \
+    php81-simplexml \
+    php81-ctype \
     php81-gd \
     php81-pecl-apcu \
     php81-pecl-redis; \
