@@ -21,7 +21,7 @@ See [drupal-helfi-platform/docker/openshift](https://github.com/City-of-Helsinki
 Based on [druidfi/drupal-web](https://github.com/druidfi/docker-images) with [few additions](https://github.com/City-of-Helsinki/drupal-docker-images/blob/main/local/drupal/Dockerfile):
 
 - [OpenShift origin client (OC)](https://github.com/City-of-Helsinki/drupal-docker-images/tree/main/local/oc)
-- Chromedriver, chrome to allow runnig functional/function javascript tests
+- Chromedriver, chrome to allow functional/function javascript tests to be run
 - Force HTTPS nginx fastcgi parameter `on` to make sure Drupal URLs are generated with`https`.
 
 Available PHP versions: `8.1`, `8.0`:
