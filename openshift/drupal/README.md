@@ -45,6 +45,8 @@ You can also build all tags at once: `make build-php-dev` (builds all `*-dev` ta
 
 ### Testing
 
+We use [GoogleContainerTools/container-structure-test](https://github.com/GoogleContainerTools/container-structure-test) to test images. See [tests/](tests/) for available tests.
+
 Running tests will always rebuild the image first.
 
 - Run tests against `8.0-dev` tag: `make test-php80-dev`
@@ -59,7 +61,11 @@ Calling `make push-php*` will:
 - Run all tests
 - Push the image to docker repository
 
+Release a specific tag:
+
 - Release `8.0-dev` tag: `make push-php80-dev`
 - Release `8.0` tag: `make push-php80`
 - Release `8.1-dev` tag: `make push-php81-dev`
 - Release `8.1` tag: `make push-php81`
+
+Release all `*-dev` tags: `make push-php-dev` or release all stable tags: `make push-php`.
