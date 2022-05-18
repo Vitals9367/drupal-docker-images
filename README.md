@@ -51,7 +51,8 @@ See [test.yml](https://github.com/City-of-Helsinki/drupal-helfi-platform/blob/ma
 
 Available Robotframework images:
 
-- `ghcr.io/city-of-helsinki/drupal-robo:alpine`
+- `ghcr.io/city-of-helsinki/drupal-robo:dev`
+- `ghcr.io/city-of-helsinki/drupal-robo:latest`
 
 Contains necessary packages to run Robotframework tests.
 
