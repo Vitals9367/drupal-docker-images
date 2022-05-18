@@ -82,9 +82,9 @@ run-php81:
 	docker run -it --rm -u 100000 $(REPOSITORY):8.1 /bin/sh
 
 define run_tests
-	cst test --image $(REPOSITORY):$(1) --config tests/php$(subst -dev,,$(subst .,,$(1))).yaml
-	cst test --image $(REPOSITORY):$(1) --config tests/php.yaml
-	cst test --image $(REPOSITORY):$(1) --config tests/nginx.yaml
+	container-structure-test test --image $(REPOSITORY):$(1) --config tests/php$(subst -dev,,$(subst .,,$(1))).yaml
+	container-structure-test test --image $(REPOSITORY):$(1) --config tests/php.yaml
+	container-structure-test test --image $(REPOSITORY):$(1) --config tests/nginx.yaml
 endef
 
 define build_image
