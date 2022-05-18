@@ -4,9 +4,12 @@ Build scripts for Docker images used by City-of-Helsinki Drupal projects.
 
 ## OpenShift Drupal docker image
 
-Contains production ready Docker images for Drupal.
+Contains production Docker images for Drupal.
 
-See [openshift/drupal/Dockerfile](openshift/drupal/Dockerfile) to see how these images are built.
+See:
+- [openshift/drupal/Dockerfile](openshift/drupal/Dockerfile) to see how these images are built.
+- [openshift/drupal/README.md](openshift/drupal/README.md) for more documentation.
+- [drupal-helfi-platform/docker/openshift](https://github.com/City-of-Helsinki/drupal-helfi-platform/tree/main/docker/openshift) for an example how to use this image.
 
 Available PHP versions: `8.1`, `8.0`, `7.4`:
 
@@ -14,15 +17,13 @@ Available PHP versions: `8.1`, `8.0`, `7.4`:
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.0`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:7.4` (deprecated)
 
-See [drupal-helfi-platform/docker/openshift](https://github.com/City-of-Helsinki/drupal-helfi-platform/tree/main/docker/openshift) for an example how to use this image.
-
 ## Local Drupal docker image
 
 Based on [druidfi/drupal-web](https://github.com/druidfi/docker-images) with [few additions](https://github.com/City-of-Helsinki/drupal-docker-images/blob/main/local/drupal/Dockerfile):
 
 - [OpenShift origin client (OC)](https://github.com/City-of-Helsinki/drupal-docker-images/tree/main/local/oc)
 - Chromedriver, chrome to allow functional/function javascript tests to be run
-- Force HTTPS nginx fastcgi parameter `on` to make sure Drupal URLs are generated with`https`.
+- Force HTTPS nginx fastcgi parameter `on` to make sure Drupal generates URLs using `https`.
 
 Available PHP versions: `8.1`, `8.0`:
 
