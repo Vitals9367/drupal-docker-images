@@ -34,9 +34,11 @@ Available PHP versions: `8.1`, `8.0`:
 
 Contains Docker images for testing Drupal.
 
-See [ci/drupal/Dockerfile](ci/drupal/Dockerfile) and [ci/robo/Dockerfile](ci/robo/Dockerfile).
+See:
+- [ci/drupal](ci/drupal) for more documentation about Drupal CI image.
+- [ci/robo](ci/robo) for more documentation about Roboframework CI image.
 
-Available PHP versions: `8.1`, `8.0`, `7.4`:
+Available PHP versions: `8.1`, `8.0`:
 
 - `ghcr.io/city-of-helsinki/drupal-php-docker:8.1-alpine`
 - `ghcr.io/city-of-helsinki/drupal-php-docker:8.0-alpine`
@@ -56,3 +58,5 @@ Contains necessary packages to run Robotframework tests.
 ## OpenShift Drupal repository image
 
 Docker image used to run [City-of-Helsinki/drupal-repository](https://github.com/City-of-Helsinki/drupal-repository).
+
+See [openshift/drupal-repository](openshift/drupal-repository) for more documentation.

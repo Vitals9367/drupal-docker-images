@@ -16,4 +16,4 @@ build-latest:
 push-latest:
 	docker push $(REPOSITORY):latest
 
-release-drupal: build push
+release: build push
