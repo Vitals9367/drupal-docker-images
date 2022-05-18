@@ -9,12 +9,14 @@ Available tags:
 
 ## Development
 
+It's highly recommended to build `dev` tag first and test the changes locally before pushing them into `latest` tag.
+
 ### Building
 
-- To build `latest` tag: `make build-latest`
 - To build `dev` tag: `make build`
+- To build `latest` tag: `make build-latest`
 
 ### Release process
 
-- To release `latest` tag: `make push-latest`
 - To release `dev` tag: `make push`
+- To release `latest` tag: `make push-latest`
