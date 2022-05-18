@@ -1,17 +1,39 @@
-PHP_VERSION ?= 8.0
-TAG ?= 8.0
+PHONY :=
 REPOSITORY = ghcr.io/city-of-helsinki/drupal-web
 
-ifeq ($(PHP_VERSION),8.0)
-	TARGET=php80
-else
-	TARGET=php81
-endif
-.PHONY: test-amd64 test-arm64 release
+PHONY += run-php80-amd64
+run-php80-amd64:
+	$(call run_image,linux/amd64,php80,8.0)
 
-test-amd64:
-	docker buildx build --load --platform linux/amd64 --target=$(TARGET) -t $(REPOSITORY):$(TAG) --build-arg PHP_VERSION=$(PHP_VERSION) ./
-test-arm64:
-	docker buildx build --load --platform linux/arm64 --target=$(TARGET) -t $(REPOSITORY):$(TAG) --build-arg PHP_VERSION=$(PHP_VERSION) ./
-release:
-	docker buildx build --platform linux/arm64,linux/amd64 --target=$(TARGET) -t $(REPOSITORY):$(TAG) --build-arg PHP_VERSION=$(PHP_VERSION) ./ --push
+PHONY += run-php81-amd64
+run-php81-amd64:
+	$(call run_image,linux/amd64,php81,8.1)
+
+PHONY += run-php80-arm64
+run-php80-arm64:
+	$(call run_image,linux/arm64,php80,8.0)
+
+PHONY += run-php81-arm64
+run-php81-arm64:
+	$(call run_image,linux/arm64,php81,8.1)
+
+PHONY += push-php80
+push-php80:
+	$(call push_image,php80,8.0)
+
+PHONY += push-php81
+push-php81:
+	$(call push_image,php81,8.1)
+
+PHONY += push-php
+push-php: push-php81 push-php80
+
+define run_image
+	docker buildx build --load --platform $(1) --target=$(2) -t $(REPOSITORY):$(3) --build-arg PHP_VERSION=$(3) ./
+endef
+
+define push_image
+	docker buildx build --platform linux/arm64,linux/amd64 --target=$(1) -t $(REPOSITORY):$(2) --build-arg PHP_VERSION=$(2) ./ --push
+endef
+
+.PHONY: $(PHONY)
