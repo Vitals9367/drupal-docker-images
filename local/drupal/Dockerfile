@@ -6,7 +6,7 @@ COPY --from=ghcr.io/city-of-helsinki/drupal-oc-cli:latest /usr/bin/oc /usr/bin/o
 RUN sudo apk add --no-cache jq
 
 # Install chromedriver.
-RUN sudo apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community chromium chromium-chromedriver
+RUN sudo apk add --no-cache chromium chromium-chromedriver
 
 # Configure nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf

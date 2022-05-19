@@ -2,6 +2,10 @@
 
 Build scripts for Docker images used by City-of-Helsinki Drupal projects.
 
+## Requirements
+
+Login to `ghcr.io` docker repository: https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry
+
 ## OpenShift Drupal docker image
 
 Contains production Docker images for Drupal.
