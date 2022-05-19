@@ -29,6 +29,8 @@ Based on [druidfi/drupal-web](https://github.com/druidfi/docker-images) with [fe
 - Chromedriver, chrome to allow functional/function javascript tests to be run
 - Force HTTPS nginx fastcgi parameter `on` to make sure Drupal generates URLs using `https`.
 
+See [local/drupal/README.md](local/drupal/README.md) for documentation.
+
 Available PHP versions: `8.1`, `8.0`:
 
 - `ghcr.io/city-of-helsinki/drupal-web:8.1`
