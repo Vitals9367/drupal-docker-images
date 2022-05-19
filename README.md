@@ -11,9 +11,8 @@ Login to `ghcr.io` docker repository: https://docs.github.com/en/packages/workin
 Contains production Docker images for Drupal.
 
 See:
-- [openshift/drupal/Dockerfile](openshift/drupal/Dockerfile) to see how these images are built.
-- [openshift/drupal/README.md](openshift/drupal/README.md) for more documentation.
-- [drupal-helfi-platform/docker/openshift](https://github.com/City-of-Helsinki/drupal-helfi-platform/tree/main/docker/openshift) for an example how to use this image.
+- [City-of-Helsinki/drupal-helfi-platform/documentation/openshift.md](https://github.com/City-of-Helsinki/drupal-helfi-platform/blob/main/documentation/openshift.md) and [City-of-Helsinki/drupal-helfi-platform/docker/openshift](https://github.com/City-of-Helsinki/drupal-helfi-platform/tree/main/docker/openshift) for documentation on how to use this image.
+- [openshift/drupal/README.md](openshift/drupal/README.md) for developer documentation.
 
 Available PHP versions: `8.1`, `8.0`, `7.4`:
 
