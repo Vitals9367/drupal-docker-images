@@ -24,6 +24,7 @@ target "php81-dev" {
     PHP_SHORT_VERSION = "81"
   }
   tags = ["${REPO_BASE}:8.1-dev"]
+  platforms = ["linux/amd64"]
 }
 
 target "php81" {
@@ -33,6 +34,7 @@ target "php81" {
     PHP_SHORT_VERSION = "81"
   }
   tags = ["${REPO_BASE}:8.1"]
+  platforms = ["linux/amd64"]
 }
 
 target "php80" {
@@ -42,6 +44,7 @@ target "php80" {
     PHP_SHORT_VERSION = "80"
   }
   tags = ["${REPO_BASE}:8.0"]
+  platforms = ["linux/amd64"]
 }
 
 target "php80-dev" {
@@ -51,5 +54,6 @@ target "php80-dev" {
     PHP_SHORT_VERSION = "80"
   }
   tags = ["${REPO_BASE}:8.0-dev"]
+  platforms = ["linux/amd64"]
 }
 
