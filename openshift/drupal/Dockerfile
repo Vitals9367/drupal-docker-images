@@ -28,8 +28,13 @@ COPY files/ /
 RUN chmod +x /entrypoints/* && \
   chmod +x /usr/local/bin/entrypoint
 
-# Fetch certificate for the Azure MariaDB service
-RUN wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /usr/local/share/ca-certificates/BaltimoreCyberTrustRoot.crt.pem
+# Fetch the required certificates for the Azure MariaDB service and combine them
+ENV AZURE_SQL_SSL_CA_PATH /usr/local/share/ca-certificates/BaltimoreCyberTrustRoot.crt.pem
+RUN wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /tmp/baltimore.crt.pem && \
+  wget https://cacerts.digicert.com/DigiCertGlobalRootG2.crt.pem -O /tmp/g2.crt.pem && \
+  cat /tmp/g2.crt.pem >> $AZURE_SQL_SSL_CA_PATH && \
+  cat /tmp/baltimore.crt.pem >> $AZURE_SQL_SSL_CA_PATH && \
+  rm /tmp/*.crt.pem
 
 ENV DRUSH_LAUNCHER_SHA256SUM c6e3e520a33ac7790ab37e5af0fd91fc1108f0830a3a5ebe5b7c36e8782bea30
 # Install drush launcher
@@ -100,7 +105,8 @@ RUN set -eux; \
     ln -sfn /usr/bin/php8 /usr/bin/php && \
     ln -sfn /usr/sbin/php-fpm8 /usr/bin/php-fpm; \
     apk del .build-deps; \
-    echo "extension=mysqlnd_azure.so" >> /etc/php8/conf.d/mysqlnd_azure.ini
+    echo "extension=mysqlnd_azure.so" >> /etc/php8/conf.d/mysqlnd_azure.ini && \
+    echo "mysqlnd_azure.enableRedirect = preferred" >> /etc/php8/conf.d/mysqlnd_azure.ini
 
 FROM php as php81
 RUN set -eux; \
