@@ -28,6 +28,10 @@ COPY files/ /
 RUN chmod +x /entrypoints/* && \
   chmod +x /usr/local/bin/entrypoint
 
+# Fetch the required certificate for the Azure MySQL flexible server service
+ENV AZURE_SQL_SSL_CA_PATH /usr/local/share/ca-certificates/DigiCertGlobalRootCA.crt.pem
+RUN wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem -O $AZURE_SQL_SSL_CA_PATH
+
 # Fetch the required certificates for the Azure MariaDB service and combine them
 ENV AZURE_SQL_SSL_CA_PATH /usr/local/share/ca-certificates/BaltimoreCyberTrustRoot.crt.pem
 RUN wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /tmp/baltimore.crt.pem && \
