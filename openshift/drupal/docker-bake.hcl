@@ -15,6 +15,9 @@ group "prod" {
 
 target "php" {
   target = "final"
+  args = {
+    ALPINE_VERSION = "3.15"
+  }
 }
 
 target "php81-dev" {
@@ -22,6 +25,7 @@ target "php81-dev" {
   args = {
     PHP_VERSION = "8.1"
     PHP_SHORT_VERSION = "81"
+    ALPINE_VERSION = "3.16"
   }
   tags = ["${REPO_BASE}:8.1-dev"]
   platforms = ["linux/amd64"]
@@ -32,6 +36,7 @@ target "php81" {
   args = {
     PHP_VERSION = "8.1"
     PHP_SHORT_VERSION = "81"
+    ALPINE_VERSION = "3.16"
   }
   tags = ["${REPO_BASE}:8.1"]
   platforms = ["linux/amd64"]
@@ -41,7 +46,7 @@ target "php80" {
   inherits = ["php"]
   args = {
     PHP_VERSION = "8.0"
-    PHP_SHORT_VERSION = "80"
+    PHP_SHORT_VERSION = "8"
   }
   tags = ["${REPO_BASE}:8.0"]
   platforms = ["linux/amd64"]
@@ -51,7 +56,7 @@ target "php80-dev" {
   inherits = ["php"]
   args = {
     PHP_VERSION = "8.0"
-    PHP_SHORT_VERSION = "80"
+    PHP_SHORT_VERSION = "8"
   }
   tags = ["${REPO_BASE}:8.0-dev"]
   platforms = ["linux/amd64"]

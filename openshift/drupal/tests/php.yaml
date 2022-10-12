@@ -32,6 +32,9 @@ commandTests:
   - name: 'drush is installed'
     command: which
     args: ['drush']
+  - name: 'php-fpm config test'
+    command: php-fpm
+    args: ['--test']
 
 metadataTest:
   env:

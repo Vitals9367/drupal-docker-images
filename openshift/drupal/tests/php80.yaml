@@ -4,6 +4,10 @@ commandTests:
     command: php
     args: ['--version']
     expectedOutput: ['PHP 8.0.*']
+  - name: 'PHP FPM version'
+    command: php-fpm
+    args: ['--version']
+    expectedOutput: ['PHP 8.0.*']
   - name: 'PHP extensions'
     command: bash
     args:

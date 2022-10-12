@@ -7,11 +7,6 @@ Available PHP versions: `8.0`, `8.1`:
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.1-dev`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.1`
 
-Using PHP 8.1 is not recommended until [microsoft/mysqlnd_azure](https://github.com/microsoft/mysqlnd_azure) adds a PHP 8.1 support. See:
-
-- https://github.com/microsoft/mysqlnd_azure/issues/31
-- https://github.com/microsoft/mysqlnd_azure/issues/30
-
 ## Development
 
 All dev/testing environments use `*-dev` images by default and it's highly recommended to push changes to `*-dev` tag first and test them on testing environment before pushing them into production (`8.0` tag for example).

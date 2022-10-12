@@ -59,7 +59,7 @@ test-php80: build-php80
 
 PHONY += test-php81-dev
 test-php81-dev: build-php81-dev
-	$(call run_tests,8.0-dev)
+	$(call run_tests,8.1-dev)
 
 PHONY += test-php81
 test-php81: build-php81
@@ -88,7 +88,7 @@ define run_tests
 endef
 
 define build_image
-	DOCKER_BUILDKIT=1 docker buildx bake --load -f docker-bake.hcl $(1)
+	DOCKER_BUILDKIT=1 docker buildx bake --load --pull -f docker-bake.hcl $(1)
 endef
 
 .PHONY: $(PHONY)

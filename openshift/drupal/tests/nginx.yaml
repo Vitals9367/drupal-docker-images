@@ -4,4 +4,7 @@ commandTests:
   - name: 'Nginx is installed'
     command: which
     args: ['nginx']
+  - name: 'Nginx config test'
+    command: nginx
+    args: ['-t']
 

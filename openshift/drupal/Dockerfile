@@ -1,6 +1,8 @@
 ARG PHP_VERSION
 ARG PHP_SHORT_VERSION
-FROM alpine:3.15.4 as php
+ARG ALPINE_VERSION
+
+FROM alpine:${ALPINE_VERSION} as php
 
 # Install required tools (https://docs.acquia.com/blt/install/)
 # alpine-sdk required for the make script in composer.json
@@ -18,7 +20,7 @@ RUN set -eux; \
     jq
 
 # Install Composer
-COPY --from=composer:2.3 /usr/bin/composer /usr/local/bin/
+COPY --from=composer:2.4 /usr/bin/composer /usr/local/bin/
 
 ENV PATH=${PATH}:/app/vendor/bin
 ENV COMPOSER_HOME=/.composer
@@ -114,7 +116,7 @@ RUN set -eux; \
 
 FROM php as php81
 RUN set -eux; \
-    apk --no-cache -X https://dl-cdn.alpinelinux.org/alpine/edge/testing add \
+    apk --no-cache add \
     php81-pear \
     php81-fpm \
     php81-curl \
@@ -130,15 +132,15 @@ RUN set -eux; \
     php81-pdo \
     php81-pdo_mysql \
     php81-tokenizer \
-    php8-xmlreader \
-    php8-xmlwriter \
+    php81-xmlreader \
+    php81-xmlwriter \
     php81-simplexml \
     php81-ctype \
     php81-gd \
     php81-pecl-apcu \
     php81-pecl-redis; \
-    ln -sfn /usr/bin/php8 /usr/bin/php && \
-    ln -sfn /usr/sbin/php-fpm8 /usr/bin/php-fpm;
+    ln -sfn /usr/bin/php81 /usr/bin/php && \
+    ln -sfn /usr/sbin/php-fpm81 /usr/bin/php-fpm;
 
 FROM php${PHP_SHORT_VERSION} as final
 ENV ELASTIC_APM_SHA256SUM 7f85305f0131c2adf3d3073d8c58b5791029b3bbd98f26743bdc2609b408aa76
@@ -148,6 +150,8 @@ RUN set -eux; \
   apk add --allow-untrusted apm-agent-php.apk && \
   rm apm-agent-php.apk
 
+ARG PHP_SHORT_VERSION
+
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
 RUN { \
@@ -156,7 +160,7 @@ RUN { \
 		echo 'opcache.max_accelerated_files=4000'; \
 		echo 'opcache.revalidate_freq=60'; \
 		echo 'opcache.fast_shutdown=1'; \
-	} > /etc/php8/conf.d/opcache-recommended.ini
+	} > /etc/php${PHP_SHORT_VERSION}/conf.d/opcache-recommended.ini
 
 # override memory limit and upload max filesize and post max size
 # to enable bigger uploads
@@ -165,7 +169,7 @@ RUN { \
 		echo 'upload_max_filesize=32M'; \
 		echo 'post_max_size=32M'; \
     echo 'max_execution_time=180'; \
-	} > /etc/php8/conf.d/php-overrides.ini
+	} > /etc/php${PHP_SHORT_VERSION}/conf.d/php-overrides.ini
 
 # Override default fpm pool conf to run nginx and php-fpm as same user.
-COPY php-fpm-pool.conf /etc/php8/php-fpm.d/www.conf
+COPY php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
