@@ -33,7 +33,7 @@ define run_image
 endef
 
 define push_image
-	docker buildx build --platform linux/arm64,linux/amd64 --target=$(1) -t $(REPOSITORY):$(2) --build-arg PHP_VERSION=$(2) ./ --push
+	docker buildx build --pull --platform linux/arm64,linux/amd64 --target=$(1) -t $(REPOSITORY):$(2) --build-arg PHP_VERSION=$(2) ./ --push
 endef
 
 .PHONY: $(PHONY)
