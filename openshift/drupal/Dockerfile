@@ -4,6 +4,9 @@ ARG ALPINE_VERSION
 
 FROM alpine:${ALPINE_VERSION} as php
 
+RUN echo 'export PS1="[${APP_ENV:-env}] \[\e[1;31m\][${HOSTNAME:-hostname}] \[\e[1;33m\]\w\[\e[0m\] $ "' >> /etc/profile
+ENV ENV="/etc/profile"
+
 # Install required tools (https://docs.acquia.com/blt/install/)
 # alpine-sdk required for the make script in composer.json
 RUN set -eux; \
@@ -80,7 +83,7 @@ ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["entrypoint"]
 
 # install the PHP extensions we need
-FROM php as php80
+FROM php as php8
 RUN set -eux; \
   apk add --no-cache --virtual .build-deps \
     php8-dev; \
