@@ -17,7 +17,7 @@ push-php80-dev: test-php80-dev
 	docker push $(REPOSITORY):8.0-dev
 
 PHONY += push-php
-push-php: push-php-81 push-php-80
+push-php: push-php81 push-php80
 
 PHONY += push-php81
 push-php81: test-php81
@@ -28,7 +28,7 @@ push-php80: test-php80
 	docker push $(REPOSITORY):8.0
 
 PHONY += build-php
-build-php: build-php81 build php80
+build-php: build-php81 build-php80
 
 PHONY += build-php-dev
 build-php-dev: build-php81-dev build-php80-dev
