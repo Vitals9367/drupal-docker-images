@@ -8,6 +8,8 @@ endif
 
 default: build
 
+run:
+	docker run -it --rm -u 100000 $(REPOSITORY):$(TAG) /bin/sh
 build:
 	docker build -t $(REPOSITORY):$(TAG) ./
 
