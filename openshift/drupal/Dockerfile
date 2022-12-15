@@ -153,8 +153,18 @@ RUN set -eux; \
   apk add --allow-untrusted apm-agent-php.apk && \
   rm apm-agent-php.apk
 
-ARG PHP_SHORT_VERSION
+ENV NEW_RELIC_SHA256SUM 2af08cde4ee75c35e98b1a4276969b4349eb94d8dec24ff547387a92975a8ad7
+RUN set -eux; \
+  curl https://download.newrelic.com/php_agent/release/newrelic-php5-10.4.0.316-linux-musl.tar.gz > newrelic-php.tar.gz && \
+  echo "$NEW_RELIC_SHA256SUM *newrelic-php.tar.gz" | sha256sum -c - && \
+  gzip -dc newrelic-php.tar.gz | tar xf - && \
+  rm newrelic-php.tar.gz && \
+  cd newrelic-php* && \
+  NR_INSTALL_SILENT=true NR_INSTALL_USE_CP_NOT_LN=1 ./newrelic-install install && \
+  cd .. && \
+  rm -rf newrelic-php*
 
+ARG PHP_SHORT_VERSION
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
 RUN { \
