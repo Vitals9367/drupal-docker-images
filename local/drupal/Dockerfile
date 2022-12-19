@@ -19,14 +19,12 @@ COPY entrypoints/30-drush-server.sh /entrypoints
 COPY entrypoints/15-syslog.sh /entrypoints
 
 FROM base as php81
-RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing add php81-pecl-pcov 
-php81-pecl-imagick
+RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing add php81-pecl-pcov php81-pecl-imagick
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY php-fpm-pool.conf /etc/php81/php-fpm.d/www.conf
 
 FROM base as php80
-RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing add php8-pecl-pcov  
-php8-pecl-imagick
+RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing add php8-pecl-pcov php8-pecl-imagick
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY php-fpm-pool.conf /etc/php8/php-fpm.d/www.conf
 
