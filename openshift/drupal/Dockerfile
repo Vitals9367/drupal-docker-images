@@ -109,6 +109,7 @@ RUN set -eux; \
     php8-ctype \
     php8-gd \
     php8-pecl-apcu \
+    php8-pecl-imagick \
     php8-pecl-redis; \
     pecl8 install mysqlnd_azure; \
     ln -sfn /usr/bin/php8 /usr/bin/php && \
@@ -141,6 +142,7 @@ RUN set -eux; \
     php81-ctype \
     php81-gd \
     php81-pecl-apcu \
+    php81-pecl-imagick \
     php81-pecl-redis; \
     ln -sfn /usr/bin/php81 /usr/bin/php && \
     ln -sfn /usr/sbin/php-fpm81 /usr/bin/php-fpm;
