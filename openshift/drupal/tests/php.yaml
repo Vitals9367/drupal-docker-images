@@ -10,7 +10,7 @@ commandTests:
       - -c
       - |
         php -m | grep -e json -e apcu -e curl -e elastic_apm -e gd -e mbstring -e openssl -e pdo -e redis -e "Zend OPcache" -e tokenizer -e xml -e SimpleXML -e ctype -e newrelic -e imagick | sort -uf
-    expectedOutput: ["apcu\nimagick\nctype\ncurl\nelastic_apm\ngd\njson\nlibxml\nmbstring\nnewrelic\nopenssl\npdo_mysql\nredis\nSimpleXML\ntokenizer\nxml\nxmlreader\nxmlwriter\nZend OPcache"]
+    expectedOutput: ["apcu\nctype\ncurl\nelastic_apm\ngd\nimagick\njson\nlibxml\nmbstring\nnewrelic\nopenssl\npdo_mysql\nredis\nSimpleXML\ntokenizer\nxml\nxmlreader\nxmlwriter\nZend OPcache"]
   - name: 'Git is installed'
     command: which
     args: ['git']
