@@ -164,10 +164,11 @@ RUN set -eux; \
   cd newrelic-php* && \
   NR_INSTALL_SILENT=true NR_INSTALL_USE_CP_NOT_LN=1 ./newrelic-install install && \
   cd .. && \
-  rm -rf newrelic-php*
+  rm -rf newrelic-php* && \
+  rm -r /tmp/*
 
 ARG PHP_SHORT_VERSION
-# set recommended PHP.ini settings
+# Set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
 RUN { \
 		echo 'opcache.memory_consumption=128'; \
@@ -177,7 +178,7 @@ RUN { \
 		echo 'opcache.fast_shutdown=1'; \
 	} > /etc/php${PHP_SHORT_VERSION}/conf.d/opcache-recommended.ini
 
-# override memory limit and upload max filesize and post max size
+# Override memory limit and upload max filesize and post max size
 # to enable bigger uploads
 RUN { \
 		echo 'memory_limit=512M'; \
@@ -185,6 +186,17 @@ RUN { \
 		echo 'post_max_size=32M'; \
     echo 'max_execution_time=180'; \
 	} > /etc/php${PHP_SHORT_VERSION}/conf.d/php-overrides.ini
+
+# Newrelic configuration.
+RUN { \
+  echo 'extension = "newrelic.so"'; \
+    echo '[newrelic]'; \
+    echo 'newrelic.enabled = true'; \
+    echo 'newrelic.license = "REPLACE_WITH_REAL_KEY"'; \
+    echo 'newrelic.logfile = "/tmp/php_agent.log"'; \
+    echo 'newrelic.appname = "PHP Application"'; \
+    echo 'newrelic.daemon.logfile = "/tmp/newrelic-daemon.log"'; \
+} > /etc/php${PHP_SHORT_VERSION}/conf.d/newrelic.ini
 
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
