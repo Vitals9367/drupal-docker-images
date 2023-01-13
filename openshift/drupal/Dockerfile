@@ -187,15 +187,19 @@ RUN { \
     echo 'max_execution_time=180'; \
 	} > /etc/php${PHP_SHORT_VERSION}/conf.d/php-overrides.ini
 
+RUN touch /tmp/php_agent.log /tmp/newrelic-daemon.log && \
+  chmod a+rw /tmp/php_agent.log /tmp/newrelic-daemon.log;
+
 # Newrelic configuration.
 RUN { \
-  echo 'extension = "newrelic.so"'; \
+    echo 'extension = "newrelic.so"'; \
     echo '[newrelic]'; \
     echo 'newrelic.enabled = true'; \
-    echo 'newrelic.license = "REPLACE_WITH_REAL_KEY"'; \
     echo 'newrelic.logfile = "/tmp/php_agent.log"'; \
-    echo 'newrelic.appname = "PHP Application"'; \
     echo 'newrelic.daemon.logfile = "/tmp/newrelic-daemon.log"'; \
+    echo 'newrelic.license = "${NEW_RELIC_LICENSE_KEY}"'; \
+    echo 'newrelic.appname = "${NEW_RELIC_APPNAME}"'; \
+    echo 'newrelic.daemon.address = "${NEW_RELIC_DAEMON_ADDRESS}"'; \
 } > /etc/php${PHP_SHORT_VERSION}/conf.d/newrelic.ini
 
 # Override default fpm pool conf to run nginx and php-fpm as same user.
