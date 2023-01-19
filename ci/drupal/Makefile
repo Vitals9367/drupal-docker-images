@@ -25,6 +25,18 @@ PHONY += push-php81
 push-php81: test-php81
 	docker push $(REPOSITORY):8.1-alpine
 
+PHONY += run-php82
+run-php82:
+	docker run -it --rm -u 100000 $(REPOSITORY):8.2-alpine /bin/sh
+
+PHONY += build-php82
+build-php82:
+	$(call build_image,8.2)
+
+PHONY += push-php82
+push-php82: test-php82
+	docker push $(REPOSITORY):8.2-alpine
+
 PHONY += test-php80
 test-php80: build-php80
 	container-structure-test test --image ghcr.io/city-of-helsinki/drupal-php-docker:8.0-alpine --config tests/php80.yaml
@@ -35,14 +47,19 @@ test-php81: build-php81
 	container-structure-test test --image ghcr.io/city-of-helsinki/drupal-php-docker:8.1-alpine --config tests/php81.yaml
 	container-structure-test test --image ghcr.io/city-of-helsinki/drupal-php-docker:8.1-alpine --config tests/php.yaml
 
+PHONY += test-php82
+test-php82: build-php82
+	container-structure-test test --image ghcr.io/city-of-helsinki/drupal-php-docker:8.2-alpine --config tests/php82.yaml
+	container-structure-test test --image ghcr.io/city-of-helsinki/drupal-php-docker:8.2-alpine --config tests/php.yaml
+
 PHONY += test-php
-test-php: test-php80 test-php81
+test-php: test-php80 test-php81 test-php82
 
 PHONY += push-php
-push-php: push-php80 push-php81
+push-php: push-php80 push-php81 push-php82
 
 define build_image
-	docker build --pull --no-cache -t $(REPOSITORY):$(1)-alpine --build-arg BASE_IMAGE_TAG=$(1)-alpine3.15 ./
+	docker build --pull -t $(REPOSITORY):$(1)-alpine --build-arg BASE_IMAGE_TAG=$(1)-alpine ./
 endef
 
 .PHONY: $(PHONY)
