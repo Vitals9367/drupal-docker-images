@@ -147,17 +147,49 @@ RUN set -eux; \
     ln -sfn /usr/bin/php81 /usr/bin/php && \
     ln -sfn /usr/sbin/php-fpm81 /usr/bin/php-fpm;
 
-FROM php${PHP_SHORT_VERSION} as final
-ENV ELASTIC_APM_SHA256SUM 546f5ea32ae77b48a27a3b3794f103a5bcae09637ce9f4b12190e2370d709fbe
+FROM php as php82
 RUN set -eux; \
-  curl -fSL https://github.com/elastic/apm-agent-php/releases/download/v1.6.2/apm-agent-php_1.6.2_all.apk > apm-agent-php.apk && \
+    apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community add \
+    php82-pear \
+    php82-fpm \
+    php82-curl \
+    php82-fileinfo \
+    php82-iconv \
+    php82-mbstring \
+    php82-opcache \
+    php82-openssl \
+    php82-phar \
+    php82-session \
+    php82-zip \
+    php82-dom \
+    php82-pdo \
+    php82-pdo_mysql \
+    php82-tokenizer \
+    php82-xmlreader \
+    php82-xmlwriter \
+    php82-simplexml \
+    php82-ctype \
+    php82-gd \
+    php82-pecl-apcu \
+    php82-pecl-redis; \
+
+    apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing add \
+    php82-pecl-imagick; \
+
+    ln -sfn /usr/bin/php82 /usr/bin/php && \
+    ln -sfn /usr/sbin/php-fpm82 /usr/bin/php-fpm;
+
+FROM php${PHP_SHORT_VERSION} as final
+ENV ELASTIC_APM_SHA256SUM 6eede33c19b288e38dc31a2ab426638022fd7744b455eecdc115c1b4854dc43a
+RUN set -eux; \
+  curl -fSL https://github.com/elastic/apm-agent-php/releases/download/v1.7.1/apm-agent-php_1.7.1_all.apk > apm-agent-php.apk && \
   echo "$ELASTIC_APM_SHA256SUM *apm-agent-php.apk" | sha256sum -c - && \
   apk add --allow-untrusted apm-agent-php.apk && \
   rm apm-agent-php.apk
 
-ENV NEW_RELIC_SHA256SUM 2af08cde4ee75c35e98b1a4276969b4349eb94d8dec24ff547387a92975a8ad7
+ENV NEW_RELIC_SHA256SUM b28af9f0f58e904ba2cc7d075e7f3a01d92808f95dad1ac87b8bcf6f471a0f8b
 RUN set -eux; \
-  curl https://download.newrelic.com/php_agent/release/newrelic-php5-10.4.0.316-linux-musl.tar.gz > newrelic-php.tar.gz && \
+  curl https://download.newrelic.com/php_agent/release/newrelic-php5-10.5.0.317-linux-musl.tar.gz > newrelic-php.tar.gz && \
   echo "$NEW_RELIC_SHA256SUM *newrelic-php.tar.gz" | sha256sum -c - && \
   gzip -dc newrelic-php.tar.gz | tar xf - && \
   rm newrelic-php.tar.gz && \
@@ -167,7 +199,22 @@ RUN set -eux; \
   rm -rf newrelic-php* && \
   rm -r /tmp/*
 
-ARG PHP_SHORT_VERSION
+RUN touch /tmp/php_agent.log /tmp/newrelic-daemon.log && \
+  chmod a+rw /tmp/php_agent.log /tmp/newrelic-daemon.log;
+
+# Newrelic configuration.
+RUN { \
+    echo 'extension = "newrelic.so"'; \
+    echo '[newrelic]'; \
+    echo 'newrelic.enabled = true'; \
+    echo 'newrelic.logfile = "/tmp/php_agent.log"'; \
+    echo 'newrelic.daemon.logfile = "/tmp/newrelic-daemon.log"'; \
+    echo 'newrelic.license = "${NEW_RELIC_LICENSE_KEY}"'; \
+    echo 'newrelic.appname = "${NEW_RELIC_APPNAME}"'; \
+    echo 'newrelic.daemon.address = "${NEW_RELIC_DAEMON_ADDRESS}"'; \
+} > /etc/php${PHP_SHORT_VERSION}/conf.d/newrelic.ini
+
+
 # Set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
 RUN { \
@@ -186,21 +233,6 @@ RUN { \
 		echo 'post_max_size=32M'; \
     echo 'max_execution_time=180'; \
 	} > /etc/php${PHP_SHORT_VERSION}/conf.d/php-overrides.ini
-
-RUN touch /tmp/php_agent.log /tmp/newrelic-daemon.log && \
-  chmod a+rw /tmp/php_agent.log /tmp/newrelic-daemon.log;
-
-# Newrelic configuration.
-RUN { \
-    echo 'extension = "newrelic.so"'; \
-    echo '[newrelic]'; \
-    echo 'newrelic.enabled = true'; \
-    echo 'newrelic.logfile = "/tmp/php_agent.log"'; \
-    echo 'newrelic.daemon.logfile = "/tmp/newrelic-daemon.log"'; \
-    echo 'newrelic.license = "${NEW_RELIC_LICENSE_KEY}"'; \
-    echo 'newrelic.appname = "${NEW_RELIC_APPNAME}"'; \
-    echo 'newrelic.daemon.address = "${NEW_RELIC_DAEMON_ADDRESS}"'; \
-} > /etc/php${PHP_SHORT_VERSION}/conf.d/newrelic.ini
 
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
