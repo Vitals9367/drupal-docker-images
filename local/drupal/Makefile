@@ -5,6 +5,10 @@ PHONY += run-php80-amd64
 run-php80-amd64:
 	$(call run_image,linux/amd64,php80,8.0)
 
+PHONY += run-php82-amd64
+run-php82-amd64:
+	$(call run_image,linux/amd64,php82,8.2)
+
 PHONY += run-php81-amd64
 run-php81-amd64:
 	$(call run_image,linux/amd64,php81,8.1)
@@ -12,6 +16,10 @@ run-php81-amd64:
 PHONY += run-php80-arm64
 run-php80-arm64:
 	$(call run_image,linux/arm64,php80,8.0)
+
+PHONY += run-php82-arm64
+run-php82-arm64:
+	$(call run_image,linux/arm64,php82,8.2)
 
 PHONY += run-php81-arm64
 run-php81-arm64:
@@ -25,8 +33,12 @@ PHONY += push-php81
 push-php81:
 	$(call push_image,php81,8.1)
 
+PHONY += push-php82
+push-php82:
+	$(call push_image,php82,8.2)
+
 PHONY += push-php
-push-php: push-php81 push-php80
+push-php: push-php81 push-php80 push-php82
 
 define run_image
 	docker buildx build --load --platform $(1) --target=$(2) -t $(REPOSITORY):$(3) --build-arg PHP_VERSION=$(3) ./

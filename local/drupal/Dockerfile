@@ -28,5 +28,13 @@ RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY php-fpm-pool.conf /etc/php8/php-fpm.d/www.conf
 
-
-
+FROM base as php82
+RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing add php82-pecl-imagick && \
+  # @todo Remove this once php82 has pcov package
+  sudo apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community php82-dev php82-pear && \
+  sudo apk add --no-cache g++ autoconf make pcre2-dev && \
+  sudo pecl82 install pcov && \
+  sudo apk del --no-cache g++ autoconf pcre2-dev && \
+  echo 'extension=pcov.so' | sudo tee -a /etc/php82/conf.d/pcov.ini
+# Override default fpm pool conf to run nginx and php-fpm as same user.
+COPY php-fpm-pool.conf /etc/php82/php-fpm.d/www.conf
