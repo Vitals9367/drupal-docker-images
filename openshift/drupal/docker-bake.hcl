@@ -6,18 +6,40 @@ group "default" {
 }
 
 group "dev" {
-  targets = ["php80-dev", "php81-dev"]
+  targets = ["php80-dev", "php81-dev", "php82-dev"]
 }
 
 group "prod" {
-  targets = ["php80", "php81"]
+  targets = ["php80", "php81", "php82"]
 }
 
 target "php" {
   target = "final"
   args = {
-    ALPINE_VERSION = "3.15"
+    ALPINE_VERSION = "3.17"
   }
+}
+
+target "php82-dev" {
+  inherits = ["php"]
+  args = {
+    PHP_VERSION = "8.2"
+    PHP_SHORT_VERSION = "82"
+    ALPINE_VERSION = "3.17"
+  }
+  tags = ["${REPO_BASE}:8.2-dev"]
+  platforms = ["linux/amd64"]
+}
+
+target "php82" {
+  inherits = ["php"]
+  args = {
+    PHP_VERSION = "8.2"
+    PHP_SHORT_VERSION = "82"
+    ALPINE_VERSION = "3.17"
+  }
+  tags = ["${REPO_BASE}:8.1"]
+  platforms = ["linux/amd64"]
 }
 
 target "php81-dev" {
@@ -47,6 +69,7 @@ target "php80" {
   args = {
     PHP_VERSION = "8.0"
     PHP_SHORT_VERSION = "8"
+    ALPINE_VERSION = "3.16"
   }
   tags = ["${REPO_BASE}:8.0"]
   platforms = ["linux/amd64"]
@@ -57,6 +80,7 @@ target "php80-dev" {
   args = {
     PHP_VERSION = "8.0"
     PHP_SHORT_VERSION = "8"
+    ALPINE_VERSION = "3.16"
   }
   tags = ["${REPO_BASE}:8.0-dev"]
   platforms = ["linux/amd64"]

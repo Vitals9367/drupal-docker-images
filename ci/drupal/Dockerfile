@@ -28,6 +28,7 @@ RUN set -eux; \
 		libpng-dev \
 		libzip-dev \
     autoconf \
+    linux-headers \
     g++ \
     libtool \
 	; \
