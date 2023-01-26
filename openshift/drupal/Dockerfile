@@ -202,6 +202,8 @@ RUN set -eux; \
 RUN touch /tmp/php_agent.log /tmp/newrelic-daemon.log && \
   chmod a+rw /tmp/php_agent.log /tmp/newrelic-daemon.log;
 
+ARG PHP_SHORT_VERSION
+
 # Newrelic configuration.
 RUN { \
     echo 'extension = "newrelic.so"'; \
@@ -214,15 +216,13 @@ RUN { \
     echo 'newrelic.daemon.address = "${NEW_RELIC_DAEMON_ADDRESS}"'; \
 } > /etc/php${PHP_SHORT_VERSION}/conf.d/newrelic.ini
 
-
 # Set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
 RUN { \
-		echo 'opcache.memory_consumption=128'; \
-		echo 'opcache.interned_strings_buffer=8'; \
-		echo 'opcache.max_accelerated_files=4000'; \
-		echo 'opcache.revalidate_freq=60'; \
-		echo 'opcache.fast_shutdown=1'; \
+		echo 'opcache.memory_consumption=512'; \
+		echo 'opcache.interned_strings_buffer=64'; \
+		echo 'opcache.max_accelerated_files=30000'; \
+		echo 'opcache.validate_timestamps=0'; \
 	} > /etc/php${PHP_SHORT_VERSION}/conf.d/opcache-recommended.ini
 
 # Override memory limit and upload max filesize and post max size
