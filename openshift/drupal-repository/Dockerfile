@@ -1,13 +1,12 @@
-FROM alpine:3.16
+FROM alpine:3.17
 COPY --from=almir/webhook /usr/local/bin/webhook /usr/local/bin/webhook
 
 # We need php and git to build satis.
-RUN apk add --no-cache git php81 php81-openssl php81-common php81-json php81-phar php81-mbstring php81-pecl-apcu make ; \
-  ln -s /usr/bin/php81 /usr/bin/php
+RUN apk add --no-cache git php81 php81-openssl php81-common php81-json php81-phar php81-mbstring php81-pecl-apcu make
 
 ENV COMPOSER_HOME=/.composer
 ENV PROJECT_DIR=/var/www/html
-COPY --from=composer:2.4 /usr/bin/composer /usr/local/bin/
+COPY --from=composer:2.5 /usr/bin/composer /usr/local/bin/
 RUN \
   # COMPOSER_HOME permissions.
   mkdir -p $COMPOSER_HOME && \
