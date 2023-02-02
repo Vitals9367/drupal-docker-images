@@ -1,11 +1,11 @@
 # Drupal CI image
 
-Available PHP versions: `8.1`, `8.0`:
+Available PHP versions: `8.2`, `8.1`, `8.0`:
 
+- `ghcr.io/city-of-helsinki/drupal-php-docker:8.2-alpine`
 - `ghcr.io/city-of-helsinki/drupal-php-docker:8.1-alpine`
 - `ghcr.io/city-of-helsinki/drupal-php-docker:8.0-alpine`
 - `ghcr.io/city-of-helsinki/drupal-php-docker:8.0`(deprecated, use `drupal-php-docker:8.0-alpine` instead)
-- `ghcr.io/city-of-helsinki/drupal-php-docker:7.4` (deprecated, left for legacy reasons)
 
 All images should include all packages necessary to run all Drupal tests (including FunctionalJavascript tests using `chromium-driver`).
 

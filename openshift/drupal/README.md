@@ -1,15 +1,17 @@
 # OpenShift Drupal base images
 
-Available PHP versions: `8.0`, `8.1`:
+Available PHP versions: `8.2`, `8.1`, `8.0`:
 
-- `ghcr.io/city-of-helsinki/drupal-docker-base:8.0-dev`
-- `ghcr.io/city-of-helsinki/drupal-docker-base:8.0`
+- `ghcr.io/city-of-helsinki/drupal-docker-base:8.2-dev`
+- `ghcr.io/city-of-helsinki/drupal-docker-base:8.2`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.1-dev`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.1`
+- `ghcr.io/city-of-helsinki/drupal-docker-base:8.0-dev`
+- `ghcr.io/city-of-helsinki/drupal-docker-base:8.0`
 
 ## Development
 
-All dev/testing environments use `*-dev` images by default and it's highly recommended to push changes to `*-dev` tag first and test them on testing environment before pushing them into production (`8.0` tag for example).
+Testing environment uses `*-dev` images by default and it's highly recommended to push changes to `*-dev` tag first and test them on testing environment before pushing them into production (`8.0` tag for example).
 
 To test production images locally:
 - Change project's `DRUPAL_IMAGE` to `ghcr.io/city-of-helsinki/drupal-docker-base:8.0-dev` (in `.env` file)
@@ -17,7 +19,7 @@ To test production images locally:
 
 ### Requirements
 
-- [GoogleContainerTools/container-structure-test](https://github.com/GoogleContainerTools/container-structure-test)
+- Install [GoogleContainerTools/container-structure-test](https://github.com/GoogleContainerTools/container-structure-test)
 - [docker/buildx](https://github.com/docker/buildx) (most likely already included by default)
 
 ### Building

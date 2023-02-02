@@ -7,8 +7,9 @@ Based on [druidfi/drupal-web](https://github.com/druidfi/docker-images) with few
 - Force HTTPS nginx fastcgi parameter `on` to make sure Drupal generates URLs using `https`
 - Run php-fpm and nginx as same user to prevent some weird permission issues
 
-Available PHP versions: `8.1`, `8.0`:
+Available PHP versions: `8.2`, `8.1`, `8.0`:
 
+- `ghcr.io/city-of-helsinki/drupal-web:8.2`
 - `ghcr.io/city-of-helsinki/drupal-web:8.1`
 - `ghcr.io/city-of-helsinki/drupal-web:8.0`
 
@@ -37,7 +38,7 @@ To release all tags at once: `make push-php`.
 
 ## Known issues
 
-Sometimes chromium fails to install due to `unable to select packages` error, something like:
+Chromium fails to install due to `unable to select packages` error, something like:
 
 ```
  => ERROR [linux/amd64 base  4/10] RUN sudo apk add --no-cache chromium chromium-chromedriver                                                                                                                                                          0.5s
@@ -55,7 +56,7 @@ Sometimes chromium fails to install due to `unable to select packages` error, so
 #0 0.449     satisfies: libavif-0.9.3-r1[so:libdav1d.so.6
 ```
 
-This can usually be fixed by changing the repository where chromium is installed from:
+This can usually be fixed by changing the alpine repository where chromium is installed from:
 
 ```diff
 # Dockerfile
