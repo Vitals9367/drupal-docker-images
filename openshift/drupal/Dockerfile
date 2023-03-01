@@ -180,16 +180,16 @@ RUN set -eux; \
     ln -sfn /usr/sbin/php-fpm82 /usr/bin/php-fpm;
 
 FROM php${PHP_SHORT_VERSION} as final
-ENV ELASTIC_APM_SHA256SUM 6eede33c19b288e38dc31a2ab426638022fd7744b455eecdc115c1b4854dc43a
+ENV ELASTIC_APM_SHA256SUM 2b50c5f256b7a7fdf25e21d0afd142ac157828e9b6dc10e7359e40e9bc088ddc
 RUN set -eux; \
-  curl -fSL https://github.com/elastic/apm-agent-php/releases/download/v1.7.1/apm-agent-php_1.7.1_all.apk > apm-agent-php.apk && \
+  curl -fSL https://github.com/elastic/apm-agent-php/releases/download/v1.8.0/apm-agent-php_1.8.0_all.apk > apm-agent-php.apk && \
   echo "$ELASTIC_APM_SHA256SUM *apm-agent-php.apk" | sha256sum -c - && \
   apk add --allow-untrusted apm-agent-php.apk && \
   rm apm-agent-php.apk
 
-ENV NEW_RELIC_SHA256SUM b28af9f0f58e904ba2cc7d075e7f3a01d92808f95dad1ac87b8bcf6f471a0f8b
+ENV NEW_RELIC_SHA256SUM 67976c46245c6b45cc06b50e80c36e35038ac8d4b2eb4d3777c9ba13f313dbbb
 RUN set -eux; \
-  curl https://download.newrelic.com/php_agent/release/newrelic-php5-10.5.0.317-linux-musl.tar.gz > newrelic-php.tar.gz && \
+  curl https://download.newrelic.com/php_agent/release/newrelic-php5-10.6.0.318-linux-musl.tar.gz > newrelic-php.tar.gz && \
   echo "$NEW_RELIC_SHA256SUM *newrelic-php.tar.gz" | sha256sum -c - && \
   gzip -dc newrelic-php.tar.gz | tar xf - && \
   rm newrelic-php.tar.gz && \
