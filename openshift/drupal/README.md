@@ -14,8 +14,11 @@ Available PHP versions: `8.2`, `8.1`, `8.0`:
 Testing environment uses `*-dev` images by default and it's highly recommended to push changes to `*-dev` tag first and test them on testing environment before pushing them into production (`8.0` tag for example).
 
 To test production images locally:
-- Change project's `DRUPAL_IMAGE` to `ghcr.io/city-of-helsinki/drupal-docker-base:8.0-dev` (in `.env` file)
+- Build the image: `make build-php81-dev`
+- Find the image ID of latest built image: `docker images ghcr.io/city-of-helsinki/drupal-docker-base` and copy the image ID
+- Change project's `DRUPAL_IMAGE` (in `.env` file) to image ID from previous step
 - Change app container's volume from `/app` to `/var/www/html` (in `docker-compose.yml` file)
+- Re/start containers: `docker-compose stop && docker compose up -d`
 
 ### Requirements
 
