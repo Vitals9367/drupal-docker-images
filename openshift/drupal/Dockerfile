@@ -23,7 +23,7 @@ RUN set -eux; \
     jq
 
 # Install Composer
-COPY --from=composer:2.4 /usr/bin/composer /usr/local/bin/
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
 
 ENV PATH=${PATH}:/app/vendor/bin
 ENV COMPOSER_HOME=/.composer
@@ -56,6 +56,7 @@ RUN chmod +x drush && mv drush /usr/local/bin
 # Create missing nginx folder.
 RUN mkdir -p /run/nginx
 COPY drupal.conf /etc/nginx/http.d/default.conf
+COPY fastcgi.conf /etc/nginx/fastcgi.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx-custom.locations /etc/nginx/conf.d/custom.locations
 
@@ -187,9 +188,9 @@ RUN set -eux; \
   apk add --allow-untrusted apm-agent-php.apk && \
   rm apm-agent-php.apk
 
-ENV NEW_RELIC_SHA256SUM 67976c46245c6b45cc06b50e80c36e35038ac8d4b2eb4d3777c9ba13f313dbbb
+ENV NEW_RELIC_SHA256SUM 64d81d741d0e278d27a5ce96bbc6c8849f7f3fc42a49c81e3795af076e93a7ef
 RUN set -eux; \
-  curl https://download.newrelic.com/php_agent/release/newrelic-php5-10.6.0.318-linux-musl.tar.gz > newrelic-php.tar.gz && \
+  curl https://download.newrelic.com/php_agent/release/newrelic-php5-10.7.0.319-linux-musl.tar.gz > newrelic-php.tar.gz && \
   echo "$NEW_RELIC_SHA256SUM *newrelic-php.tar.gz" | sha256sum -c - && \
   gzip -dc newrelic-php.tar.gz | tar xf - && \
   rm newrelic-php.tar.gz && \
