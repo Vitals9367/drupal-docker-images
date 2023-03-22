@@ -18,6 +18,7 @@ To test production images locally:
 - Find the image ID of latest built image: `docker images ghcr.io/city-of-helsinki/drupal-docker-base` and copy the image ID
 - Change project's `DRUPAL_IMAGE` (in `.env` file) to image ID from previous step
 - Change app container's volume from `/app` to `/var/www/html` (in `docker-compose.yml` file)
+- Re/start containers: `docker-compose stop && docker compose up -d`
 
 ### Requirements
 
