@@ -101,11 +101,12 @@ COPY --from=composer:2.4 /usr/bin/composer /usr/local/bin/
 
 ENV COMPOSER_HOME=/tmp/.composer
 
+# This environment variable is used by drush pm:security command.
+ENV DRUSH_SECURITY_ADVISORIES_URL=https://raw.githubusercontent.com/tuutti/drupal-security-advisories/9.x/composer.json
 # Install drush launcher
-ENV DRUSH_LAUNCHER_SHA256SUM=d466e4268dcb2f3465feeb01518d2770c4be8ca533e010b678799bbd14dd90c5
-ENV BOX_REQUIREMENT_CHECKER=0
+ENV DRUSH_LAUNCHER_SHA256SUM=0ae18cd3f8745fdd58ab852481b89428b57be6523edf4d841ebef198c40271be
 RUN \
-  curl -fSL -o drush "https://github.com/drush-ops/drush-launcher/releases/download/0.10.0/drush.phar" && \
+  curl -fSL -o drush "https://github.com/drush-ops/drush-launcher/releases/download/0.10.2/drush.phar" && \
   echo "${DRUSH_LAUNCHER_SHA256SUM} *drush" | sha256sum -c - && \
   chmod +x drush && \
   mv drush /usr/local/bin
