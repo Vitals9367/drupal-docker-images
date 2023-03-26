@@ -64,7 +64,7 @@ RUN set -eux; \
     /usr/local/bin/php-cgi
 
 # We can't remove files from base layer (php container) so we have to copy everything
-# into a new layer to not to waste space.
+# into a new layer to not waste space.
 FROM scratch
 COPY --from=base / /
 
