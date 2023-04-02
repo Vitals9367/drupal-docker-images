@@ -6,7 +6,7 @@ RUN apk add --no-cache git php81 php81-openssl php81-common php81-json php81-pha
 
 ENV COMPOSER_HOME=/.composer
 ENV PROJECT_DIR=/var/www/html
-COPY --from=composer:2.5 /usr/bin/composer /usr/local/bin/
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
 RUN \
   # COMPOSER_HOME permissions.
   mkdir -p $COMPOSER_HOME && \
