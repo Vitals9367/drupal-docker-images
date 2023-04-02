@@ -37,7 +37,7 @@ commandTests:
     args: ['--test']
 
 metadataTest:
-  env:
+  envVars:
     - key: 'COMPOSER_HOME'
       value: '/.composer'
     - key: 'AZURE_SQL_SSL_CA_PATH'

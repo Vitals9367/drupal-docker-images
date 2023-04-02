@@ -38,7 +38,7 @@ target "php82" {
     PHP_SHORT_VERSION = "82"
     ALPINE_VERSION = "3.17"
   }
-  tags = ["${REPO_BASE}:8.1"]
+  tags = ["${REPO_BASE}:8.2"]
   platforms = ["linux/amd64"]
 }
 

@@ -188,9 +188,9 @@ RUN set -eux; \
   apk add --allow-untrusted apm-agent-php.apk && \
   rm apm-agent-php.apk
 
-ENV NEW_RELIC_SHA256SUM 64d81d741d0e278d27a5ce96bbc6c8849f7f3fc42a49c81e3795af076e93a7ef
+ENV NEW_RELIC_SHA256SUM 4c56258ce966d0e53fddfdaf765c0574a6f64f0c91a9c229108b98fbf37c8213
 RUN set -eux; \
-  curl https://download.newrelic.com/php_agent/release/newrelic-php5-10.7.0.319-linux-musl.tar.gz > newrelic-php.tar.gz && \
+  curl https://download.newrelic.com/php_agent/archive/10.8.0.323/newrelic-php5-10.8.0.323-linux-musl.tar.gz > newrelic-php.tar.gz && \
   echo "$NEW_RELIC_SHA256SUM *newrelic-php.tar.gz" | sha256sum -c - && \
   gzip -dc newrelic-php.tar.gz | tar xf - && \
   rm newrelic-php.tar.gz && \
