@@ -109,6 +109,7 @@ RUN set -eux; \
     php8-simplexml \
     php8-ctype \
     php8-gd \
+    php8-sodium \
     php8-pecl-apcu \
     php8-pecl-imagick \
     php8-pecl-redis; \
@@ -142,6 +143,7 @@ RUN set -eux; \
     php81-simplexml \
     php81-ctype \
     php81-gd \
+    php81-sodium \
     php81-pecl-apcu \
     php81-pecl-imagick \
     php81-pecl-redis; \
@@ -171,6 +173,7 @@ RUN set -eux; \
     php82-simplexml \
     php82-ctype \
     php82-gd \
+    php82-sodium \
     php82-pecl-apcu \
     php82-pecl-redis; \
 
