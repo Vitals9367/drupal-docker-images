@@ -56,6 +56,8 @@ Running tests will always rebuild the image first.
 
 ### Release process
 
+Make sure youre logged in to `ghcr.io` docker repository: https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry
+
 Calling `make push-php*` will:
 - Run the build script
 - Run all tests
