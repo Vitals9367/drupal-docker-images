@@ -1,4 +1,5 @@
 PHONY :=
+BUILD_EXTRA_ARGS :=
 REPOSITORY = ghcr.io/city-of-helsinki/drupal-docker-base
 
 PHONY += help
@@ -120,7 +121,7 @@ define run_tests
 endef
 
 define build_image
-	DOCKER_BUILDKIT=1 docker buildx bake --load --pull -f docker-bake.hcl $(1)
+	DOCKER_BUILDKIT=1 docker buildx bake $(BUILD_EXTRA_ARGS) --load --pull -f docker-bake.hcl $(1)
 endef
 
 .PHONY: $(PHONY)
