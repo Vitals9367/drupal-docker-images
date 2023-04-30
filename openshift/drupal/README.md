@@ -58,7 +58,7 @@ Make sure youre logged in to `ghcr.io` docker repository: https://docs.github.co
 
 Call `make push-php` or `make push-php-dev` to:
 - Build all PHP versions at once
-- Run all tests against
+- Run all tests
 - Push all built images to Docker repository
 
 You can also release a specific tag by:
