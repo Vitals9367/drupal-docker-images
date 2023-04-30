@@ -63,7 +63,7 @@ Call `make push-php` or `make push-php-dev` to:
 
 You can also release a specific tag by:
 
-- `make push-php81-dev`: Build, tests and pushes the `8.1-dev` tag
-- `make push-php81`: Builds, tests and pushes the `8.1` tag
+- `make push-php81-dev`: Build, tests and push the `8.1-dev` tag
+- `make push-php81`: Builds, tests and push the `8.1` tag
 
 See Makefile for available PHP versions.
