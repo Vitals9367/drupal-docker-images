@@ -17,6 +17,7 @@ Available PHP versions: `8.2`, `8.1`, `8.0`:
 
 ### Requirements
 
+- You must be logged in to `ghcr.io` Docker repository: https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry
 - [docker/buildx](https://github.com/docker/buildx) (most likely already included by default)
 - Ability to build multi-platform images. See [docker/buildx#building-multi-platform-images](https://github.com/docker/buildx#building-multi-platform-images)
 
