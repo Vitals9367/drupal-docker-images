@@ -52,7 +52,7 @@ commandTests:
     args: ['--version']
 
 metadataTest:
-  env:
+  envVars:
     - key: 'COMPOSER_HOME'
       value: '/tmp/.composer'
     - key: 'DRUSH_SECURITY_ADVISORIES_URL'
