@@ -6,7 +6,7 @@ COPY --from=ghcr.io/city-of-helsinki/drupal-oc-cli:latest /usr/bin/oc /usr/bin/o
 RUN sudo apk add --no-cache jq
 
 # Install chromedriver.
-RUN sudo apk add --no-cache chromium chromium-chromedriver
+RUN sudo apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community  --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main chromium chromium-chromedriver
 
 # Configure nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
@@ -19,20 +19,30 @@ COPY entrypoints/30-drush-server.sh /entrypoints
 COPY entrypoints/15-syslog.sh /entrypoints
 
 FROM base as php81
-RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing add php81-pecl-pcov php81-pecl-imagick
+RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing  \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community add php81-pecl-pcov php81-pecl-imagick
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY php-fpm-pool.conf /etc/php81/php-fpm.d/www.conf
 
 FROM base as php80
-RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing add php8-pecl-pcov php8-pecl-imagick
+RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing  \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community add php8-pecl-pcov php8-pecl-imagick
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY php-fpm-pool.conf /etc/php8/php-fpm.d/www.conf
 
 FROM base as php82
-RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing add php82-pecl-imagick && \
+RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add php82-pecl-imagick && \
   # @todo Remove this once php82 has pcov package
-  sudo apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community php82-dev php82-pear && \
-  sudo apk add --no-cache g++ autoconf make pcre2-dev && \
+  sudo apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases php82-dev php82-pear && \
+  sudo apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main g++ autoconf make pcre2-dev && \
   sudo pecl82 install pcov && \
   sudo apk del --no-cache g++ autoconf pcre2-dev && \
   echo 'extension=pcov.so' | sudo tee -a /etc/php82/conf.d/pcov.ini
