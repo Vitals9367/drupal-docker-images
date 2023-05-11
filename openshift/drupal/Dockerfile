@@ -184,12 +184,6 @@ RUN set -eux; \
     ln -sfn /usr/sbin/php-fpm82 /usr/bin/php-fpm;
 
 FROM php${PHP_SHORT_VERSION} as final
-ENV ELASTIC_APM_SHA256SUM 2b50c5f256b7a7fdf25e21d0afd142ac157828e9b6dc10e7359e40e9bc088ddc
-RUN set -eux; \
-  curl -fSL https://github.com/elastic/apm-agent-php/releases/download/v1.8.0/apm-agent-php_1.8.0_all.apk > apm-agent-php.apk && \
-  echo "$ELASTIC_APM_SHA256SUM *apm-agent-php.apk" | sha256sum -c - && \
-  apk add --allow-untrusted apm-agent-php.apk && \
-  rm apm-agent-php.apk
 
 ENV NEW_RELIC_SHA256SUM 4c56258ce966d0e53fddfdaf765c0574a6f64f0c91a9c229108b98fbf37c8213
 RUN set -eux; \
