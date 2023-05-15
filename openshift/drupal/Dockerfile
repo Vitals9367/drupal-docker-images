@@ -225,7 +225,9 @@ RUN { \
 
 # Override memory limit and upload max filesize and post max size
 # to enable bigger uploads
+# New relic triggers garbage collector which adds extra time on the request.
 RUN { \
+        echo 'zend.enable_gc=Off'; \
 		echo 'memory_limit=512M'; \
 		echo 'upload_max_filesize=32M'; \
 		echo 'post_max_size=32M'; \
