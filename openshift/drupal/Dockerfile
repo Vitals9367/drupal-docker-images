@@ -177,7 +177,7 @@ RUN set -eux; \
     php82-pecl-apcu \
     php82-pecl-redis; \
 
-    apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing add \
+    apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main add \
     php82-pecl-imagick; \
 
     ln -sfn /usr/bin/php82 /usr/bin/php && \
