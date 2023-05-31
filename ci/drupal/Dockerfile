@@ -93,10 +93,19 @@ RUN apk add --no-cache \
 # Install Composer
 COPY --from=composer:2.5 /usr/bin/composer /usr/local/bin/
 
+ENV SIMPLETEST_BASE_URL=http://127.0.0.1:8888
+ENV SIMPLETEST_DB=mysql://drupal:drupal@db:3306/drupal
 ENV COMPOSER_HOME=/tmp/.composer
-
 # This environment variable is used by drush pm:security command.
 ENV DRUSH_SECURITY_ADVISORIES_URL=https://raw.githubusercontent.com/tuutti/drupal-security-advisories/9.x/composer.json
+# Individual module tests use `composer config repositories N $GITHUB_WORKSPACE && composer require drupal/$MODULE_NAME` to
+# symlink module's codebase from $GITHUB_WORKSPACE to public/modules/contrib folder. PHPUnit seems to report an incorrect
+# test coverage if the test folder is a symlink.
+#
+# This setting changes composer to mirror the content instead of symlinking it.
+# @see https://helsinkisolutionoffice.atlassian.net/browse/UHF-8566
+ENV COMPOSER_MIRROR_PATH_REPOS=1
+
 # Install drush launcher
 ENV DRUSH_LAUNCHER_SHA256SUM=0ae18cd3f8745fdd58ab852481b89428b57be6523edf4d841ebef198c40271be
 RUN \
