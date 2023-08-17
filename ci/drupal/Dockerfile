@@ -106,7 +106,8 @@ ENV DRUSH_SECURITY_ADVISORIES_URL=https://raw.githubusercontent.com/tuutti/drupa
 # @see https://helsinkisolutionoffice.atlassian.net/browse/UHF-8566
 ENV COMPOSER_MIRROR_PATH_REPOS=1
 
-# Automatically discard uncommitted changes in modules.
+# Automatically discard uncommitted changes. This usually happens when attempting to update a package that
+# has any patches applied.
 ENV COMPOSER_DISCARD_CHANGES=true
 
 # Install drush launcher
