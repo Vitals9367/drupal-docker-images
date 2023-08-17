@@ -63,3 +63,5 @@ metadataTest:
       value: 'http://127.0.0.1:8888'
     - key: 'COMPOSER_MIRROR_PATH_REPOS'
       value: '1'
+    - key: 'COMPOSER_DISCARD_CHANGES'
+      value: 'true'
