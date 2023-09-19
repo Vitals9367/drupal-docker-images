@@ -1,5 +1,7 @@
 # Robotframework CI image
 
+*_IMPORTANT_: This is no longer updated and should not be used!*
+
 Docker image used to test Drupal using Robotframework.
 
 Available tags:
