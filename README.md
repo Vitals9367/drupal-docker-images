@@ -59,3 +59,7 @@ See [test.yml](https://github.com/City-of-Helsinki/drupal-helfi-platform/blob/ma
 Docker image used to run [City-of-Helsinki/drupal-repository](https://github.com/City-of-Helsinki/drupal-repository).
 
 See [openshift/drupal-repository](openshift/drupal-repository) for more documentation.
+
+## Contact
+
+Slack: #helfi-drupal (http://helsinkicity.slack.com/)
