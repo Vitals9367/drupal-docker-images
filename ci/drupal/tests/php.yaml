@@ -20,12 +20,6 @@ commandTests:
   - name: 'MariaDB client is installed'
     command: which
     args: ['mysql']
-  - name: 'Chromium is installed'
-    command: which
-    args: ['chromium-browser']
-  - name: 'Chromedriver is installed'
-    command: which
-    args: ['chromedriver']
   - name: 'Bash is installed'
     command: which
     args: ['bash']

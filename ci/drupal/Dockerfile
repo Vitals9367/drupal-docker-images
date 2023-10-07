@@ -8,8 +8,6 @@ RUN apk add --no-cache \
     git \
     patch \
     mariadb-client \
-    chromium \
-    chromium-chromedriver \
     # druidfi/tools has dependency to make and
     # 'make cast-spell' has dependency to bash
     make \
