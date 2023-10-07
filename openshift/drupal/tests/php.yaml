@@ -29,15 +29,14 @@ commandTests:
   - name: 'make is installed'
     command: which
     args: ['make']
-  - name: 'drush is installed'
-    command: which
-    args: ['drush']
   - name: 'php-fpm config test'
     command: php-fpm
     args: ['--test']
 
 metadataTest:
   envVars:
+    - key: 'PATH'
+      value: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/app/vendor/bin:/var/www/html/vendor/bin'
     - key: 'COMPOSER_HOME'
       value: '/.composer'
     - key: 'AZURE_SQL_SSL_CA_PATH'

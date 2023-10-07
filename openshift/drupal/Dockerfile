@@ -132,7 +132,6 @@ RUN set -eux; \
     php82-pecl-redis; \
     apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main add \
     php82-pecl-imagick; \
-
     ln -sfn /usr/bin/php82 /usr/bin/php && \
     ln -sfn /usr/sbin/php-fpm82 /usr/bin/php-fpm;
 
