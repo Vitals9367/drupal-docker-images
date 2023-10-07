@@ -20,7 +20,7 @@ RUN set -eux; \
     nginx \
     bash \
     jq \
-    supervisor
+    tini
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
@@ -65,11 +65,14 @@ RUN \
 # Expose nginx
 EXPOSE 8080
 
-COPY bin/ /usr/local/bin
-RUN chmod +x /usr/local/bin/*
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# Copy configuration files and scripts
+COPY files/ /
+RUN chmod +x /entrypoints/* && \
+  chmod +x /usr/local/bin/entrypoint
+ENTRYPOINT ["/sbin/tini", "--"]
 
-ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Default command: Start up multiple services via entrypoint
+CMD ["entrypoint"]
 
 FROM php as php81
 RUN set -eux; \
