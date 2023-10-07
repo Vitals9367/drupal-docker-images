@@ -1,11 +1,14 @@
 # OpenShift Drupal base images
 
-Available PHP versions: `8.2`, `8.1`, `8.0`:
+Supported PHP versions: `8.2`, `8.1`:
 
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.2-dev`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.2`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.1-dev`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.1`
+
+Unsupported PHP versions: `8.0`:
+
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.0-dev`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.0`
 
@@ -21,7 +24,7 @@ Testing environment uses `*-dev` images by default and it's highly recommended t
 ### Testing production image locally
 
 - Build the image: `make build-php81-dev` (change `php81` to whatever is your actual PHP version)
-- Find the image ID of latest built image: `docker images ghcr.io/city-of-helsinki/drupal-docker-base` and copy the image ID
+- Find the image ID of latest `docker images ghcr.io/city-of-helsinki/drupal-docker-base` image and copy the image ID
 - Change project's `DRUPAL_IMAGE` (in `.env` file) to image ID from previous step
 - Change app container's volume from `/app` to `/var/www/html` (in `docker-compose.yml` file)
 - Re/start containers: `docker-compose stop && docker compose up -d`
