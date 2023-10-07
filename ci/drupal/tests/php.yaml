@@ -41,9 +41,6 @@ commandTests:
   - name: 'sqlite is installed'
     command: which
     args: ['sqlite3']
-  - name: 'drush is installed'
-    command: which
-    args: ['drush']
   - name: 'codecov is installed'
     command: codecov
     args: ['--version']

@@ -5,15 +5,11 @@ COPY --from=ghcr.io/city-of-helsinki/drupal-oc-cli:latest /usr/bin/oc /usr/bin/o
 
 RUN sudo apk add --no-cache jq
 
-# Install chromedriver.
-RUN sudo apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community  --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main chromium chromium-chromedriver
-
 # Configure nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY custom.locations /etc/nginx/conf.d/custom.locations
 
-# Autostart chromedriver and drush server
-COPY entrypoints/30-chromedriver.sh /entrypoints
+# Autostart drush server
 COPY entrypoints/30-drush-server.sh /entrypoints
 # Autostart syslog
 COPY entrypoints/15-syslog.sh /entrypoints
@@ -24,13 +20,6 @@ RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community add php81-pecl-pcov php81-pecl-imagick
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY php-fpm-pool.conf /etc/php81/php-fpm.d/www.conf
-
-FROM base as php80
-RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing  \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community add php8-pecl-pcov php8-pecl-imagick
-# Override default fpm pool conf to run nginx and php-fpm as same user.
-COPY php-fpm-pool.conf /etc/php8/php-fpm.d/www.conf
 
 FROM base as php82
 RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
