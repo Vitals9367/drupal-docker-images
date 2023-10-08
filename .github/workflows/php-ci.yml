@@ -1,12 +1,13 @@
 on:
   pull_request:
     paths:
-    - ci/drupal
-  push:
+      - 'ci/drupal/**'
+      - '.github/workflows/php-ci.yml':
     branches:
       - main
     paths:
-    - ci/drupal
+      - 'ci/drupal/**'
+      - '.github/workflows/php-ci.yml':
 
 jobs:
   build-ci-image:
