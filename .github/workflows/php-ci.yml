@@ -24,4 +24,5 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Run tests
+        working-directory: ci/drupal
         run: make test-php
