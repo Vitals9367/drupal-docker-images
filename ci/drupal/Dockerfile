@@ -94,6 +94,7 @@ COPY --from=composer:2.5 /usr/bin/composer /usr/local/bin/
 ENV SIMPLETEST_BASE_URL=http://127.0.0.1:8888
 ENV SIMPLETEST_DB=mysql://drupal:drupal@db:3306/drupal
 ENV COMPOSER_HOME=/tmp/.composer
+
 # This environment variable is used by drush pm:security command.
 ENV DRUSH_SECURITY_ADVISORIES_URL=https://raw.githubusercontent.com/tuutti/drupal-security-advisories/9.x/composer.json
 # Individual module tests use `composer config repositories N $GITHUB_WORKSPACE && composer require drupal/$MODULE_NAME` to
