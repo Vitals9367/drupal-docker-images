@@ -9,6 +9,9 @@ help:
 PHONY += push-php-dev
 push-php-dev: push-php81-dev push-php82-dev
 
+PHONY += test-php
+test-php: test-php81-dev test-php82-dev
+
 PHONY += push-php81-dev
 push-php81-dev: test-php81-dev
 	docker push $(REPOSITORY):8.1-dev
