@@ -8,10 +8,11 @@ while [[ "$dir" != "/" ]]; do
   # If vendor/bin/drush exists, run it
   if [[ -x "$dir/vendor/bin/drush" ]]; then
     "$dir/vendor/bin/drush" "$@"
-    return
+    exit $?
   fi
   # Go up one directory level
   dir=$(dirname "$dir")
 done
 
 echo "Could not find drush in any parent directory."
+exit 1
