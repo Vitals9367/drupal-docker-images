@@ -88,6 +88,9 @@ RUN apk add --no-cache \
   --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
   github-cli
 
+# Copy scripts and configuration files.
+COPY files/ /
+
 # Install Composer
 COPY --from=composer:2.5 /usr/bin/composer /usr/local/bin/
 
@@ -108,14 +111,6 @@ ENV COMPOSER_MIRROR_PATH_REPOS=1
 # Automatically discard uncommitted changes. This usually happens when attempting to update a package that
 # has any patches applied.
 ENV COMPOSER_DISCARD_CHANGES=true
-
-# Install drush launcher
-ENV DRUSH_LAUNCHER_SHA256SUM=0ae18cd3f8745fdd58ab852481b89428b57be6523edf4d841ebef198c40271be
-RUN \
-  curl -fSL -o drush "https://github.com/drush-ops/drush-launcher/releases/download/0.10.2/drush.phar" && \
-  echo "${DRUSH_LAUNCHER_SHA256SUM} *drush" | sha256sum -c - && \
-  chmod +x drush && \
-  mv drush /usr/local/bin
 
 RUN curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import; \
   curl -Os https://uploader.codecov.io/latest/alpine/codecov; \
