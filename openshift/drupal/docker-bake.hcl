@@ -6,11 +6,11 @@ group "default" {
 }
 
 group "dev" {
-  targets = ["php80-dev", "php81-dev", "php82-dev"]
+  targets = ["php81-dev", "php82-dev"]
 }
 
 group "prod" {
-  targets = ["php80", "php81", "php82"]
+  targets = ["php81", "php82"]
 }
 
 target "php" {

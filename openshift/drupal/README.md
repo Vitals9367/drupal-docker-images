@@ -7,11 +7,6 @@ Supported PHP versions: `8.2`, `8.1`:
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.1-dev`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.1`
 
-Unsupported PHP versions: `8.0`:
-
-- `ghcr.io/city-of-helsinki/drupal-docker-base:8.0-dev`
-- `ghcr.io/city-of-helsinki/drupal-docker-base:8.0`
-
 Testing environment uses `*-dev` images by default and it's highly recommended to push changes to `*-dev` tag first and test them on testing environment before pushing them into production (`8.0` tag for example).
 
 ## Development

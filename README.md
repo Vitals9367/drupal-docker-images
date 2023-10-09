@@ -25,11 +25,10 @@ Based on [druidfi/drupal-web](https://github.com/druidfi/docker-images) with som
 
 See [local/drupal/README.md](local/drupal/README.md) for documentation.
 
-Available PHP versions: `8.2`, `8.1`, `8.0`:
+Available PHP versions: `8.2`, `8.1`:
 
 - `ghcr.io/city-of-helsinki/drupal-web:8.2`
 - `ghcr.io/city-of-helsinki/drupal-web:8.1`
-- `ghcr.io/city-of-helsinki/drupal-web:8.0`
 
 ## CI docker images
 
