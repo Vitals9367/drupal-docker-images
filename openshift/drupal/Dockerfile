@@ -17,21 +17,16 @@ RUN set -eux; \
     bash \
     mariadb-client \
     alpine-sdk \
-    tini \
     nginx \
     bash \
-    jq
+    jq \
+    tini
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
 
-ENV PATH=${PATH}:/app/vendor/bin
+ENV PATH=${PATH}:/app/vendor/bin:/var/www/html/vendor/bin
 ENV COMPOSER_HOME=/.composer
-
-# Copy configuration files and scripts
-COPY files/ /
-RUN chmod +x /entrypoints/* && \
-  chmod +x /usr/local/bin/entrypoint
 
 # Fetch the required certificate for the Azure MySQL flexible server service
 ENV AZURE_SQL_SSL_CA_PATH /usr/local/share/ca-certificates/DigiCertGlobalRootCA.crt.pem
@@ -44,14 +39,6 @@ RUN wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /tm
   cat /tmp/g2.crt.pem >> $AZURE_SQL_SSL_CA_PATH && \
   cat /tmp/baltimore.crt.pem >> $AZURE_SQL_SSL_CA_PATH && \
   rm /tmp/*.crt.pem
-
-ENV DRUSH_LAUNCHER_SHA256SUM c6e3e520a33ac7790ab37e5af0fd91fc1108f0830a3a5ebe5b7c36e8782bea30
-# Install drush launcher
-RUN \
-  curl -fSL -o drush "https://github.com/drush-ops/drush-launcher/releases/download/0.10.1/drush.phar" && \
-  echo "$DRUSH_LAUNCHER_SHA256SUM *drush" | sha256sum -c -
-
-RUN chmod +x drush && mv drush /usr/local/bin
 
 # Create missing nginx folder.
 RUN mkdir -p /run/nginx
@@ -78,47 +65,14 @@ RUN \
 # Expose nginx
 EXPOSE 8080
 
+# Copy configuration files and scripts
+COPY files/ /
+RUN chmod +x /entrypoints/* && \
+  chmod +x /usr/local/bin/entrypoint
 ENTRYPOINT ["/sbin/tini", "--"]
 
 # Default command: Start up multiple services via entrypoint
 CMD ["entrypoint"]
-
-# install the PHP extensions we need
-FROM php as php8
-RUN set -eux; \
-  apk add --no-cache --virtual .build-deps \
-    php8-dev; \
-  apk add --no-cache \
-    php8-pear \
-    php8-fpm \
-    php8-curl \
-    php8-fileinfo \
-    php8-iconv \
-    php8-mbstring \
-    php8-opcache \
-    php8-openssl \
-    php8-phar \
-    php8-session \
-    php8-zip \
-    php8-dom \
-    php8-pdo \
-    php8-pdo_mysql \
-    php8-tokenizer \
-    php8-xmlreader \
-    php8-xmlwriter \
-    php8-simplexml \
-    php8-ctype \
-    php8-gd \
-    php8-sodium \
-    php8-pecl-apcu \
-    php8-pecl-imagick \
-    php8-pecl-redis; \
-    pecl8 install mysqlnd_azure; \
-    ln -sfn /usr/bin/php8 /usr/bin/php && \
-    ln -sfn /usr/sbin/php-fpm8 /usr/bin/php-fpm; \
-    apk del .build-deps; \
-    echo "extension=mysqlnd_azure.so" >> /etc/php8/conf.d/mysqlnd_azure.ini && \
-    echo "mysqlnd_azure.enableRedirect = preferred" >> /etc/php8/conf.d/mysqlnd_azure.ini
 
 FROM php as php81
 RUN set -eux; \
@@ -152,7 +106,7 @@ RUN set -eux; \
 
 FROM php as php82
 RUN set -eux; \
-    apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community add \
+    apk --no-cache add \
     php82-pear \
     php82-fpm \
     php82-curl \
@@ -176,10 +130,8 @@ RUN set -eux; \
     php82-sodium \
     php82-pecl-apcu \
     php82-pecl-redis; \
-
     apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main add \
     php82-pecl-imagick; \
-
     ln -sfn /usr/bin/php82 /usr/bin/php && \
     ln -sfn /usr/sbin/php-fpm82 /usr/bin/php-fpm;
 

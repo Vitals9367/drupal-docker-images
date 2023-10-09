@@ -10,16 +10,12 @@ test-arm64:
 push-arm64:
 	docker buildx build --platform linux/arm64 -t $(REPOSITORY):$(TAG) ./ --push
 
-PHONY += push-php80
-push-php80:
-	$(call push_image,8.0)
-
 PHONY += push-php81
 push-php81:
 	$(call push_image,8.1)
 
 PHONY += push-php
-push-php: push-php81 push-php80
+push-php: push-php81
 
 define test_image
 	docker buildx build --load --platform $(1) -t $(REPOSITORY):$(2) ./

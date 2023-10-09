@@ -7,40 +7,35 @@ help:
 	@echo -e "See README.md for usage"
 
 PHONY += push-php-dev
-push-php-dev: push-php81-dev push-php80-dev push-php82-dev
+push-php-dev: push-php81-dev push-php82-dev
+
+PHONY += test-php
+test-php: test-php81-dev test-php82-dev
 
 PHONY += push-php81-dev
 push-php81-dev: test-php81-dev
 	docker push $(REPOSITORY):8.1-dev
-
-PHONY += push-php80-dev
-push-php80-dev: test-php80-dev
-	docker push $(REPOSITORY):8.0-dev
 
 PHONY += push-php82-dev
 push-php82-dev: test-php82-dev
 	docker push $(REPOSITORY):8.2-dev
 
 PHONY += push-php
-push-php: push-php81 push-php80 push-php82
+push-php: push-php81 push-php82
 
 PHONY += push-php81
 push-php81: test-php81
 	docker push $(REPOSITORY):8.1
-
-PHONY += push-php80
-push-php80: test-php80
-	docker push $(REPOSITORY):8.0
 
 PHONY += push-php82
 push-php82: test-php82
 	docker push $(REPOSITORY):8.2
 
 PHONY += build-php
-build-php: build-php81 build-php80 build-php82
+build-php: build-php81 build-php82
 
 PHONY += build-php-dev
-build-php-dev: build-php81-dev build-php80-dev build-php82-dev
+build-php-dev: build-php81-dev build-php82-dev
 
 PHONY += build-php81-dev
 build-php81-dev:
@@ -50,14 +45,6 @@ PHONY += build-php82-dev
 build-php82-dev:
 	$(call build_image,php82-dev)
 
-PHONY += build-php80-dev
-build-php80-dev:
-	$(call build_image,php80-dev)
-
-PHONY += build-php80
-build-php80:
-	$(call build_image,php80)
-
 PHONY += build-php81
 build-php81:
 	$(call build_image,php81)
@@ -66,17 +53,9 @@ PHONY += build-php82
 build-php82:
 	$(call build_image,php82)
 
-PHONY += test-php80-dev
-test-php80-dev: build-php80-dev
-	$(call run_tests,8.0-dev)
-
 PHONY += test-php82-dev
 test-php82-dev: build-php82-dev
 	$(call run_tests,8.2-dev)
-
-PHONY += test-php80
-test-php80: build-php80
-	$(call run_tests,8.0)
 
 PHONY += test-php81-dev
 test-php81-dev: build-php81-dev
@@ -89,14 +68,6 @@ test-php81: build-php81
 PHONY += test-php82
 test-php82: build-php82
 	$(call run_tests,8.2)
-
-PHONY += run-php80
-run-php80:
-	docker run -it --rm -u 100000 $(REPOSITORY):8.0 /bin/sh
-
-PHONY += run-php80-dev
-run-php80-dev:
-	docker run -it --rm -u 100000 $(REPOSITORY):8.0-dev /bin/sh
 
 PHONY += run-php81-dev
 run-php81-dev:

@@ -1,11 +1,9 @@
 # Drupal CI image
 
-Available PHP versions: `8.2`, `8.1`, `8.0`:
+Available PHP versions: `8.2`, `8.1`:
 
 - `ghcr.io/city-of-helsinki/drupal-php-docker:8.2-alpine`
 - `ghcr.io/city-of-helsinki/drupal-php-docker:8.1-alpine`
-- `ghcr.io/city-of-helsinki/drupal-php-docker:8.0-alpine`
-- `ghcr.io/city-of-helsinki/drupal-php-docker:8.0`(deprecated, use `drupal-php-docker:8.0-alpine` instead)
 
 All images should include all packages necessary to run all Drupal tests (including FunctionalJavascript tests using `chromium-driver`).
 
@@ -29,12 +27,10 @@ See [test.yml](https://github.com/City-of-Helsinki/drupal-helfi-platform/blob/ma
 
 To build a specific image, call:
 
-- `8.0-alpine` tag: `make build-php80`
 - `8.1-alpine` tag: `make build-php81`
 
 To run built image locally:
 
-- `8.0-alpine` tag: `make run-php80`
 - `8.1-alpine` tag: `make run-php81`
 
 ### Testing
@@ -43,7 +39,6 @@ We use [GoogleContainerTools/container-structure-test](https://github.com/Google
 
 Running tests will always rebuild the image first.
 
-- Run tests against `8.0-alpine` tag: `make test-php80`
 - Run tests against `8.1-alpine` tag: `make test-php81`
 
 ### Release process
@@ -55,7 +50,6 @@ Calling `make push-php*` will:
 
 Release a specific tag:
 
-- Release `8.0-alpine` tag: `make push-php80`
 - Release `8.1-alpine` tag: `make push-php81`
 
 Release all tags at once: `make push-php`.
