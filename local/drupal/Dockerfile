@@ -5,14 +5,10 @@ COPY --from=ghcr.io/city-of-helsinki/drupal-oc-cli:latest /usr/bin/oc /usr/bin/o
 
 RUN sudo apk add --no-cache jq
 
-# Configure nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY custom.locations /etc/nginx/conf.d/custom.locations
+# Autostart drush server and syslog services.
+COPY entrypoints/ /entrypoints
 
-# Autostart drush server
-COPY entrypoints/30-drush-server.sh /entrypoints
-# Autostart syslog
-COPY entrypoints/15-syslog.sh /entrypoints
+COPY files/ /
 
 FROM base as php81
 RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing  \
