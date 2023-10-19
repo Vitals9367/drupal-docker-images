@@ -92,7 +92,7 @@ RUN apk add --no-cache \
 COPY files/ /
 
 # Install Composer
-COPY --from=composer:2.5 /usr/bin/composer /usr/local/bin/
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
 
 ENV SIMPLETEST_BASE_URL=http://127.0.0.1:8888
 ENV SIMPLETEST_DB=mysql://drupal:drupal@db:3306/drupal
