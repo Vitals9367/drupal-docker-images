@@ -1,6 +1,6 @@
-FROM alpine:3.15.0
+FROM alpine:3.18
 
-ENV OC_TAG=openshift-clients-4.6.0-202006250705.p0
+ENV OC_TAG=openshift-clients-4.13.0-202304190216
 RUN \
   apk add --no-cache --virtual .build-deps \
     git \
